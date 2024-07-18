@@ -20,7 +20,9 @@ function App() {
   return (
     <div className="App flex h-screen p-4 gap-4 font-sans">
       <Sidebar setActiveTab={setActiveTab} activeTab={activeTab} />
-      <ActiveComponent />
+      <div className="bg-white w-full p-8 rounded-3xl border-2 border-slate-200">
+        <ActiveComponent />
+      </div>
     </div>
   );
 }

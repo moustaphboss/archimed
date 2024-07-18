@@ -23,7 +23,7 @@ const NavButton: React.FC<NavButtonProps> = ({
       }`}
       onClick={() => setActiveTab(tabKey)}
     >
-      <i className={`${iconClass} mt-1 mr-4`}></i>
+      <i className={`${iconClass} mt-2 mr-4`}></i>
       {label}
     </button>
   );
