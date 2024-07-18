@@ -13,7 +13,7 @@ const SECTIONS: Record<SectionKeys, React.FC> = {
 };
 
 function App() {
-  const [activeTab, setActiveTab] = useState<SectionKeys>("Bills");
+  const [activeTab, setActiveTab] = useState<SectionKeys>("Investors");
 
   const ActiveComponent = SECTIONS[activeTab];
 

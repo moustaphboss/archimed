@@ -3,7 +3,7 @@ import React from "react";
 export default function CapitalCallsSection() {
   return (
     <>
-      <h1 className="text-xl font-semibold">Capital Calls</h1>
+      <h1 className="text-3xl font-medium">Capital Calls</h1>
     </>
   );
 }

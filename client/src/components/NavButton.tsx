@@ -18,7 +18,7 @@ const NavButton: React.FC<NavButtonProps> = ({
 }) => {
   return (
     <button
-      className={`flex items-center w-full mb-4 p-4 rounded-xl ${
+      className={`flex items-center w-full mb-4 px-4 py-2 rounded-xl ${
         activeTab === tabKey ? "bg-violet-600" : "hover:bg-gray-800"
       }`}
       onClick={() => setActiveTab(tabKey)}

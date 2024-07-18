@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Bill } from "../../utils/types";
+import { Bill } from "../../utils/interfaces";
 import { Table } from "flowbite-react";
 
 const BILLS = [
-  { id: 1, type: "B2024001", amount: 100 },
-  { id: 2, type: "B2024002", amount: 150 },
-  { id: 3, type: "B2024003", amount: 200 },
+  { id: 1, type: "B2024001", amount: 100, investor_id: 1, validated: true },
+  { id: 2, type: "B2024002", amount: 150, investor_id: 1, validated: true },
+  { id: 3, type: "B2024003", amount: 200, investor_id: 1, validated: true },
 ];
 
 export default function BillsSection() {
@@ -18,7 +18,7 @@ export default function BillsSection() {
 
   return (
     <>
-      <h1 className="text-3xl font-medium">Bills</h1>
+      <h1 className="text-2xl font-medium">Bills</h1>
       {hasBills ? (
         <div className="mt-4">
           <Table>

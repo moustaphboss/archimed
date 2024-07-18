@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Investor } from "../../utils/types";
+import { Investor } from "../../utils/interfaces";
 import { Table } from "flowbite-react";
 
 const INVESTORS: Investor[] = [
@@ -8,7 +8,6 @@ const INVESTORS: Investor[] = [
     first_name: "John",
     last_name: "Doe",
     email: "john.doe@example.com",
-    iban: "DE89370400440532013000",
     amount_invested: 10000,
   },
   {
@@ -16,7 +15,6 @@ const INVESTORS: Investor[] = [
     first_name: "Jane",
     last_name: "Smith",
     email: "jane.smith@example.com",
-    iban: "FR1420041010050500013M02606",
     amount_invested: 15000,
   },
   {
@@ -24,7 +22,6 @@ const INVESTORS: Investor[] = [
     first_name: "Alice",
     last_name: "Johnson",
     email: "alice.johnson@example.com",
-    iban: "GB29NWBK60161331926819",
     amount_invested: 20000,
   },
   {
@@ -32,7 +29,6 @@ const INVESTORS: Investor[] = [
     first_name: "Bob",
     last_name: "Brown",
     email: "bob.brown@example.com",
-    iban: "IT60X0542811101000000123456",
     amount_invested: 25000,
   },
   {
@@ -40,7 +36,6 @@ const INVESTORS: Investor[] = [
     first_name: "Charlie",
     last_name: "Davis",
     email: "charlie.davis@example.com",
-    iban: "ES9121000418450200051332",
     amount_invested: 30000,
   },
 ];
@@ -64,7 +59,6 @@ export default function InvestorsSection() {
               <Table.HeadCell>First Name</Table.HeadCell>
               <Table.HeadCell>Last Name</Table.HeadCell>
               <Table.HeadCell>Email</Table.HeadCell>
-              <Table.HeadCell>IBAN</Table.HeadCell>
               <Table.HeadCell>Amount Invested</Table.HeadCell>
             </Table.Head>
             <Table.Body>
@@ -74,7 +68,6 @@ export default function InvestorsSection() {
                   <Table.Cell>{investor.first_name}</Table.Cell>
                   <Table.Cell>{investor.last_name}</Table.Cell>
                   <Table.Cell>{investor.email}</Table.Cell>
-                  <Table.Cell>{investor.iban}</Table.Cell>
                   <Table.Cell>{investor.amount_invested}</Table.Cell>
                 </Table.Row>
               ))}
@@ -136,7 +129,7 @@ export default function InvestorsSection() {
             onClick={() => generateInvestors()}
             className=" bg-violet-600 hover:bg-violet-700 text-white p-4 rounded-xl"
           >
-            Generate Investors
+            Add Investor
           </button>
         </div>
       )}
