@@ -14,8 +14,8 @@ interface SidebarProps {
 }
 const Sidebar: React.FC<SidebarProps> = ({ setActiveTab, activeTab }) => {
   return (
-    <div className="flex flex-col bg-black text-white w-64 h-full">
-      <div className="flex flex-col items-start p-4">
+    <div className="flex flex-col bg-black text-white w-80 h-full rounded-3xl">
+      <div className="flex flex-col items-start p-4 mt-28">
         {MENU.map((item) => (
           <NavButton
             key={item.key}
