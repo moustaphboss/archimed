@@ -6,6 +6,7 @@ export interface Investor {
   last_name: string;
   email: string;
   amount_invested: number;
+  investment_date: Date | null;
 }
 
 export interface Bill {
@@ -21,8 +22,8 @@ export interface CapitalCall {
   investor_id: number;
   iban: string;
   total_amount: number;
-  due_date: string;
+  due_date: Date;
   status: Status;
   bills: Bill[];
-  date: string;
+  date: Date;
 }

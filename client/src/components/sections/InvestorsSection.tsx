@@ -1,44 +1,57 @@
 import React, { useState } from "react";
 import { Investor } from "../../utils/interfaces";
-import { Button, Modal, Table } from "flowbite-react";
+import {
+  Button,
+  Datepicker,
+  Label,
+  Modal,
+  Table,
+  TextInput,
+} from "flowbite-react";
+import DatePicker from "react-datepicker";
 
-const INVESTORS: Investor[] = [
-  {
-    id: 1,
-    first_name: "John",
-    last_name: "Doe",
-    email: "john.doe@example.com",
-    amount_invested: 10000,
-  },
-  {
-    id: 2,
-    first_name: "Jane",
-    last_name: "Smith",
-    email: "jane.smith@example.com",
-    amount_invested: 15000,
-  },
-  {
-    id: 3,
-    first_name: "Alice",
-    last_name: "Johnson",
-    email: "alice.johnson@example.com",
-    amount_invested: 20000,
-  },
-  {
-    id: 4,
-    first_name: "Bob",
-    last_name: "Brown",
-    email: "bob.brown@example.com",
-    amount_invested: 25000,
-  },
-  {
-    id: 5,
-    first_name: "Charlie",
-    last_name: "Davis",
-    email: "charlie.davis@example.com",
-    amount_invested: 30000,
-  },
-];
+// const INVESTORS: Investor[] = [
+//   {
+//     id: 1,
+//     first_name: "John",
+//     last_name: "Doe",
+//     email: "john.doe@example.com",
+//     amount_invested: 10000,
+//     investment_date: new Date().toISOString(),
+//   },
+//   {
+//     id: 2,
+//     first_name: "Jane",
+//     last_name: "Smith",
+//     email: "jane.smith@example.com",
+//     amount_invested: 15000,
+//     investment_date: new Date().toISOString(),
+//   },
+//   {
+//     id: 3,
+//     first_name: "Alice",
+//     last_name: "Johnson",
+//     email: "alice.johnson@example.com",
+//     amount_invested: 20000,
+//     investment_date: new Date().toISOString(),
+//   },
+//   {
+//     id: 4,
+//     first_name: "Bob",
+//     last_name: "Brown",
+//     email: "bob.brown@example.com",
+//     amount_invested: 25000,
+//     investment_date: new Date().toISOString(),
+//   },
+//   {
+//     id: 5,
+//     first_name: "Charlie",
+//     last_name: "Davis",
+//     email: "charlie.davis@example.com",
+//     amount_invested: 30000,
+//     investment_date: new Date().toISOString(),
+//   },
+// ];
 
 export default function InvestorsSection() {
   const [investors, setInvestors] = useState<Investor[]>([]);
@@ -49,6 +62,7 @@ export default function InvestorsSection() {
     last_name: "",
     email: "",
     amount_invested: 0,
+    investment_date: null,
   });
 
   const hasInvestors = investors.length > 0;
@@ -61,6 +75,13 @@ export default function InvestorsSection() {
     }));
   };
 
+  const handleDateChange = (date: Date | null) => {
+    setNewInvestor((prev) => ({
+      ...prev,
+      investment_date: date,
+    }));
+  };
+
   const handleAddInvestor = () => {
     setInvestors((prev) => [...prev, { ...newInvestor, id: prev.length + 1 }]);
     setOpenModal(false);
@@ -70,6 +91,7 @@ export default function InvestorsSection() {
       last_name: "",
       email: "",
       amount_invested: 0,
+      investment_date: null,
     });
   };
 
@@ -94,6 +116,7 @@ export default function InvestorsSection() {
               <Table.HeadCell>Last Name</Table.HeadCell>
               <Table.HeadCell>Email</Table.HeadCell>
               <Table.HeadCell>Amount Invested</Table.HeadCell>
+              <Table.HeadCell>Investment Date</Table.HeadCell>
             </Table.Head>
             <Table.Body>
               {investors.map((investor) => (
@@ -103,6 +126,9 @@ export default function InvestorsSection() {
                   <Table.Cell>{investor.last_name}</Table.Cell>
                   <Table.Cell>{investor.email}</Table.Cell>
                   <Table.Cell>{investor.amount_invested}</Table.Cell>
+                  <Table.Cell>
+                    {investor.investment_date?.toDateString()}
+                  </Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>
@@ -113,47 +139,47 @@ export default function InvestorsSection() {
           <p className="mb-8 text-gray-500 text-2xl">
             There are no investors to display.
           </p>
-          <div className="bg-slate-100 p-8 mb-8 rounded-3xl">
+          <div className="bg-slate-100 p-12 mb-8 rounded-3xl">
             <svg
-              width="96"
-              height="96"
-              viewBox="0 0 96 96"
+              width="90"
+              height="90"
+              viewBox="0 0 90 90"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clip-path="url(#clip0_9_136)">
                 <path
-                  d="M95.9998 22.4999C95.9998 10.0935 85.9064 0 73.4999 0C66.8506 0 60.8656 2.8993 56.7431 7.50016H5.62498C2.52337 7.50016 0 10.0235 0 13.1251V90.375C0 93.4766 2.52337 96 5.62479 96H69.7499C72.8515 96 75.3749 93.4766 75.3749 90.375V44.9224C86.9076 43.9665 95.9998 34.2751 95.9998 22.4999ZM5.62498 11.2501H54.0197C52.0999 14.5616 51 18.4047 51 22.4999C51 26.3815 51.9973 30.1806 53.891 33.5389C53.3644 35.5011 52.838 37.4637 52.3112 39.4296C51.9855 40.6521 52.329 41.9121 53.2297 42.8001C54.1168 43.6744 55.4077 44.0104 56.6021 43.6791C58.5547 43.1558 60.5071 42.6321 62.4596 42.1082C65.2754 43.6963 68.4007 44.6539 71.6247 44.922V83.55H3.74999V13.1251C3.74999 12.0913 4.59111 11.2501 5.62498 11.2501ZM69.7499 92.25H5.62498C4.59111 92.25 3.75017 91.4089 3.75017 90.375V87.3H71.6251V90.375C71.6249 91.4089 70.7838 92.25 69.7499 92.25ZM73.4999 41.2498C70.0353 41.2498 66.6511 40.2973 63.713 38.4953C63.4153 38.3127 63.0757 38.2185 62.7326 38.2185C62.57 38.2185 62.4067 38.2397 62.2466 38.2827C60.183 38.8363 58.1195 39.3898 56.0559 39.943C56.6092 37.878 57.1625 35.8152 57.7162 33.7519C57.8497 33.2547 57.7728 32.7246 57.5036 32.2857C55.7021 29.3483 54.7496 25.9645 54.7496 22.4999C54.7496 12.1612 63.1606 3.74999 73.4995 3.74999C83.8384 3.74999 92.2495 12.1612 92.2495 22.4999C92.2495 32.8386 83.8388 41.2498 73.4999 41.2498Z"
+                  d="M89.9998 21.0937C89.9998 9.46262 80.5372 0 68.9062 0C62.6725 0 57.0615 2.71809 53.1967 7.0314H5.27342C2.36566 7.0314 0 9.39705 0 12.3048V84.7266C0 87.6343 2.36566 90 5.27324 90H65.3906C68.2983 90 70.664 87.6343 70.664 84.7266V42.1147C81.4759 41.2186 89.9998 32.1329 89.9998 21.0937ZM5.27342 10.547H50.6434C48.8436 13.6515 47.8125 17.2544 47.8125 21.0937C47.8125 24.7327 48.7475 28.2943 50.5229 31.4427C50.0291 33.2823 49.5357 35.1222 49.0417 36.9652C48.7364 38.1113 49.0584 39.2926 49.9029 40.1251C50.7345 40.9447 51.9447 41.2597 53.0645 40.9491C54.895 40.4585 56.7254 39.9676 58.5558 39.4764C61.1957 40.9653 64.1256 41.863 67.1482 42.1144V78.3282H3.51561V12.3048C3.51561 11.3356 4.30416 10.547 5.27342 10.547ZM65.3906 86.4844H5.27342C4.30416 86.4844 3.51579 85.6958 3.51579 84.7266V81.8438H67.1485V84.7266C67.1484 85.6958 66.3598 86.4844 65.3906 86.4844ZM68.9062 38.6717C65.6581 38.6717 62.4854 37.7788 59.7309 36.0893C59.4518 35.9181 59.1335 35.8299 58.8118 35.8299C58.6594 35.8299 58.5063 35.8497 58.3562 35.89C56.4215 36.4091 54.4871 36.928 52.5524 37.4465C53.0711 35.5107 53.5899 33.5767 54.109 31.6424C54.2341 31.1763 54.162 30.6793 53.9096 30.2678C52.2207 27.5141 51.3278 24.3417 51.3278 21.0937C51.3278 11.4011 59.2131 3.51561 68.9058 3.51561C78.5985 3.51561 86.4839 11.4011 86.4839 21.0937C86.4839 30.7862 78.5989 38.6717 68.9062 38.6717Z"
                   fill="#9CA3AF"
                 />
                 <path
-                  d="M84.7498 16.875C84.7498 15.3725 84.1648 13.9601 83.1024 12.8979C82.0402 11.8355 80.6278 11.2503 79.1252 11.2503C77.6227 11.2503 76.2103 11.8355 75.1479 12.8979L73.5003 14.5456L71.8524 12.8977C69.6592 10.7047 66.0907 10.7047 63.8979 12.8977C61.7051 15.0907 61.7051 18.659 63.8979 20.852L65.5458 22.5L63.8979 24.1477C61.7051 26.3407 61.7051 29.909 63.8979 32.102C66.0907 34.2948 69.6592 34.2948 71.8524 32.102L73.5003 30.4543L75.1479 32.102C76.2103 33.1644 77.6227 33.7494 79.1252 33.7494C80.6278 33.7494 82.0402 33.1642 83.1024 32.102C84.1646 31.0398 84.7498 29.6274 84.7498 28.125C84.7498 26.6225 84.1648 25.2101 83.1024 24.1479L81.4545 22.5L83.1022 20.852C84.1646 19.7898 84.7498 18.3774 84.7498 16.875ZM77.477 23.8258L80.4504 26.7993C80.8046 27.1533 80.9996 27.6241 80.9996 28.1248C80.9996 28.6256 80.8046 29.0962 80.4504 29.4504C80.0964 29.8044 79.6258 29.9994 79.125 29.9994C78.6242 29.9994 78.1533 29.8044 77.7995 29.4504L74.8262 26.4768C74.46 26.1106 73.9802 25.9276 73.5003 25.9276C73.0205 25.9276 72.5407 26.1106 72.1747 26.4768L69.2008 29.4504C68.8468 29.8046 68.3762 29.9994 67.8753 29.9994C67.3745 29.9994 66.9037 29.8044 66.5499 29.4504C65.8192 28.7195 65.8192 27.5302 66.5497 26.7993L69.5235 23.8258C69.8752 23.4742 70.0728 22.9972 70.0728 22.5C70.0728 22.0027 69.8752 21.5257 69.5237 21.1741L66.5499 18.2006C65.8192 17.4697 65.8192 16.2804 66.5499 15.5495C66.9039 15.1953 67.3745 15.0005 67.8753 15.0005C68.3762 15.0005 68.847 15.1955 69.2008 15.5495L72.1745 18.5231C72.5263 18.8746 73.0031 19.0723 73.5003 19.0723C73.9976 19.0723 74.4746 18.8746 74.8262 18.5231L77.7995 15.5495C78.1535 15.1953 78.6242 15.0005 79.125 15.0005C79.6258 15.0005 80.0966 15.1955 80.4504 15.5495C80.8046 15.9033 80.9998 16.3741 80.9998 16.875C80.9998 17.3758 80.8048 17.8464 80.4506 18.2006L77.4772 21.1743C76.7448 21.9063 76.7448 23.0936 77.477 23.8258Z"
+                  d="M79.4529 15.8203C79.4529 14.4118 78.9044 13.0876 77.9085 12.0918C76.9127 11.0959 75.5885 10.5472 74.1798 10.5472C72.7713 10.5472 71.4471 11.0959 70.4511 12.0918L68.9065 13.6366L67.3616 12.0917C65.3055 10.0357 61.96 10.0357 59.9042 12.0917C57.8485 14.1476 57.8485 17.4929 59.9042 19.5488L61.4492 21.0938L59.9042 22.6385C57.8485 24.6945 57.8485 28.0398 59.9042 30.0957C61.96 32.1515 65.3055 32.1515 67.3616 30.0957L68.9065 28.5509L70.4511 30.0957C71.4471 31.0917 72.7713 31.6401 74.1798 31.6401C75.5885 31.6401 76.9127 31.0915 77.9085 30.0957C78.9043 29.0999 79.4529 27.7757 79.4529 26.3672C79.4529 24.9587 78.9044 23.6345 77.9085 22.6387L76.3635 21.0938L77.9083 19.5488C78.9043 18.553 79.4529 17.2289 79.4529 15.8203ZM72.6347 22.3367L75.4222 25.1244C75.7543 25.4563 75.9371 25.8977 75.9371 26.367C75.9371 26.8365 75.7543 27.2777 75.4222 27.6098C75.0903 27.9417 74.6491 28.1245 74.1796 28.1245C73.7101 28.1245 73.2687 27.9417 72.937 27.6098L70.1495 24.8221C69.8062 24.4788 69.3564 24.3072 68.9065 24.3072C68.4567 24.3072 68.0069 24.4788 67.6638 24.8221L64.8757 27.6098C64.5438 27.9419 64.1026 28.1245 63.6331 28.1245C63.1636 28.1245 62.7222 27.9417 62.3905 27.6098C61.7055 26.9246 61.7055 25.8096 62.3903 25.1244L65.1782 22.3367C65.508 22.0071 65.6932 21.5599 65.6932 21.0938C65.6932 20.6276 65.508 20.1804 65.1784 19.8508L62.3905 17.0631C61.7055 16.3779 61.7055 15.2629 62.3905 14.5777C62.7224 14.2457 63.1636 14.063 63.6331 14.063C64.1026 14.063 64.544 14.2459 64.8757 14.5777L67.6636 17.3654C67.9933 17.695 68.4404 17.8803 68.9065 17.8803C69.3727 17.8803 69.8199 17.695 70.1495 17.3654L72.937 14.5777C73.2689 14.2457 73.7101 14.063 74.1796 14.063C74.6491 14.063 75.0905 14.2459 75.4222 14.5777C75.7543 14.9094 75.9373 15.3508 75.9373 15.8203C75.9373 16.2898 75.7544 16.731 75.4224 17.0631L72.6349 19.851C71.9483 20.5372 71.9483 21.6503 72.6347 22.3367Z"
                   fill="#9CA3AF"
                 />
                 <path
-                  d="M13.1254 52.5005H43.1254C44.1607 52.5005 45.0004 51.6611 45.0004 50.6255C45.0004 43.5729 40.6515 37.517 34.4947 34.9985C36.3424 33.2851 37.5004 30.8381 37.5004 28.1255C37.5004 22.9561 33.2947 18.7505 28.1254 18.7505C22.956 18.7505 18.7504 22.9561 18.7504 28.1255C18.7504 30.8381 19.9084 33.2851 21.756 34.9985C15.5992 37.517 11.2504 43.5731 11.2504 50.6255C11.2504 51.6611 12.09 52.5005 13.1254 52.5005ZM28.1254 22.5005C31.227 22.5005 33.7504 25.0239 33.7504 28.1255C33.7504 31.2271 31.227 33.7505 28.1254 33.7505C25.0237 33.7505 22.5004 31.2271 22.5004 28.1255C22.5004 25.0239 25.0237 22.5005 28.1254 22.5005ZM28.1254 37.5005C34.7259 37.5005 40.2043 42.3984 41.1169 48.7505H15.1339C16.0466 42.3984 21.5248 37.5005 28.1254 37.5005Z"
+                  d="M12.305 49.2192H40.43C41.4007 49.2192 42.1878 48.4323 42.1878 47.4614C42.1878 40.8496 38.1107 35.1722 32.3388 32.8111C34.0709 31.2048 35.1566 28.9107 35.1566 26.3677C35.1566 21.5214 31.2138 17.5786 26.3675 17.5786C21.5212 17.5786 17.5784 21.5214 17.5784 26.3677C17.5784 28.9107 18.6641 31.2048 20.3962 32.8111C14.6243 35.1722 10.5472 40.8498 10.5472 47.4614C10.5472 48.4323 11.3343 49.2192 12.305 49.2192ZM26.3675 21.0942C29.2753 21.0942 31.6409 23.4599 31.6409 26.3677C31.6409 29.2755 29.2753 31.6411 26.3675 31.6411C23.4597 31.6411 21.0941 29.2755 21.0941 26.3677C21.0941 23.4599 23.4597 21.0942 26.3675 21.0942ZM26.3675 35.1567C32.5555 35.1567 37.6915 39.7485 38.547 45.7036H14.188C15.0437 39.7485 20.1795 35.1567 26.3675 35.1567Z"
                   fill="#9CA3AF"
                 />
                 <path
-                  d="M13.1254 61.2003H62.2498C63.2852 61.2003 64.1248 60.3609 64.1248 59.3253C64.1248 58.2898 63.2852 57.4503 62.2498 57.4503H13.1254C12.09 57.4503 11.2504 58.2898 11.2504 59.3253C11.2504 60.3609 12.09 61.2003 13.1254 61.2003Z"
+                  d="M12.305 57.3754H58.3591C59.3298 57.3754 60.1169 56.5884 60.1169 55.6175C60.1169 54.6467 59.3298 53.8597 58.3591 53.8597H12.305C11.3343 53.8597 10.5472 54.6467 10.5472 55.6175C10.5472 56.5884 11.3343 57.3754 12.305 57.3754Z"
                   fill="#9CA3AF"
                 />
                 <path
-                  d="M62.2499 66.1503H21.5634C20.528 66.1503 19.6884 66.9897 19.6884 68.0253C19.6884 69.0609 20.528 69.9003 21.5634 69.9003H62.2499C63.2853 69.9003 64.1249 69.0609 64.1249 68.0253C64.1249 66.9897 63.2853 66.1503 62.2499 66.1503Z"
+                  d="M58.3593 62.0159H20.2156C19.245 62.0159 18.4578 62.8028 18.4578 63.7737C18.4578 64.7445 19.245 65.5315 20.2156 65.5315H58.3593C59.33 65.5315 60.1171 64.7445 60.1171 63.7737C60.1171 62.8028 59.33 62.0159 58.3593 62.0159Z"
                   fill="#9CA3AF"
                 />
                 <path
-                  d="M13.1254 78.6001H62.2498C63.2852 78.6001 64.1248 77.7606 64.1248 76.7251C64.1248 75.6895 63.2852 74.8501 62.2498 74.8501H13.1254C12.09 74.8501 11.2504 75.6895 11.2504 76.7251C11.2504 77.7606 12.09 78.6001 13.1254 78.6001Z"
+                  d="M12.305 73.6876H58.3591C59.3298 73.6876 60.1169 72.9006 60.1169 71.9298C60.1169 70.959 59.3298 70.172 58.3591 70.172H12.305C11.3343 70.172 10.5472 70.959 10.5472 71.9298C10.5472 72.9006 11.3343 73.6876 12.305 73.6876Z"
                   fill="#9CA3AF"
                 />
                 <path
-                  d="M13.1253 66.1503C12.09 66.1503 11.2511 66.9897 11.2511 68.0253C11.2511 69.0609 12.0911 69.9003 13.1267 69.9003C14.1622 69.9003 15.0017 69.0609 15.0017 68.0253C15.0017 66.9897 14.162 66.1503 13.1267 66.1503H13.1253Z"
+                  d="M12.305 62.0159C11.3344 62.0159 10.5479 62.8028 10.5479 63.7737C10.5479 64.7445 11.3354 65.5315 12.3063 65.5315C13.2771 65.5315 14.0641 64.7445 14.0641 63.7737C14.0641 62.8028 13.2769 62.0159 12.3063 62.0159H12.305Z"
                   fill="#9CA3AF"
                 />
               </g>
               <defs>
                 <clipPath id="clip0_9_136">
-                  <rect width="96" height="96" fill="white" />
+                  <rect width="90" height="90" fill="white" />
                 </clipPath>
               </defs>
             </svg>
@@ -168,60 +194,84 @@ export default function InvestorsSection() {
       >
         <Modal.Header>Add investor</Modal.Header>
         <Modal.Body>
-          <form className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                First Name
-              </label>
-              <input
-                type="text"
-                name="first_name"
-                value={newInvestor.first_name}
-                onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
+          <form className="space-y-8">
+            <div className="flex space-x-4">
+              <div className="w-full">
+                <Label className="block text-sm font-medium text-gray-700 mb-1">
+                  First Name
+                </Label>
+                <TextInput
+                  type="text"
+                  name="first_name"
+                  value={newInvestor.first_name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="w-full">
+                <Label className="block text-sm font-medium text-gray-700 mb-1">
+                  Last Name
+                </Label>
+                <TextInput
+                  type="text"
+                  name="last_name"
+                  value={newInvestor.last_name}
+                  onChange={handleChange}
+                  // className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Last Name
-              </label>
-              <input
-                type="text"
-                name="last_name"
-                value={newInvestor.last_name}
-                onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <Label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
-              </label>
-              <input
+              </Label>
+              <TextInput
                 type="email"
                 name="email"
                 value={newInvestor.email}
+                placeholder="johndoe@archimed.com"
                 onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                // className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Amount Invested
-              </label>
-              <input
-                type="number"
-                name="amount_invested"
-                value={newInvestor.amount_invested}
-                onChange={handleChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
+            <div className="flex space-x-4">
+              <div className="w-full">
+                <Label className="block text-sm font-medium text-gray-700 mb-1">
+                  Amount Invested ($)
+                </Label>
+                <TextInput
+                  type="number"
+                  name="amount_invested"
+                  value={newInvestor.amount_invested}
+                  onChange={handleChange}
+                  // className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div className="w-full">
+                <div>
+                  <Label className="block text-sm font-medium text-gray-700 mb-1">
+                    Investment Date
+                  </Label>
+                  {/* <DatePicker
+                    selected={newInvestor.investment_date}
+                    onChange={(date: Date) => handleDateChange(date)}
+                    dateFormat="yyyy/MM/dd"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  /> */}
+                  <DatePicker
+                    selected={newInvestor.investment_date}
+                    onChange={handleDateChange}
+                    dateFormat="dd/MM/yyyy"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
             </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
           <Button className="bg-purple-700" onClick={handleAddInvestor}>
-            Add Investor
+            <i className="fi-rr-disk mr-4 mt-0.5"></i>
+            Save
           </Button>
           <Button color="gray" onClick={() => setOpenModal(false)}>
             Cancel
