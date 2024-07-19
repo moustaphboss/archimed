@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
+import "flowbite/dist/flowbite.css";
+
 import Sidebar from "./components/Sidebar";
 import CapitalCallsSection from "./components/sections/CapitalCallsSection";
 import BillsSection from "./components/sections/BillsSection";

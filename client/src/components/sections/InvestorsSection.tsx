@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Investor } from "../../utils/interfaces";
-import { Table } from "flowbite-react";
+import { Button, Modal, Table } from "flowbite-react";
 
 const INVESTORS: Investor[] = [
   {
@@ -42,15 +42,49 @@ const INVESTORS: Investor[] = [
 
 export default function InvestorsSection() {
   const [investors, setInvestors] = useState<Investor[]>([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [newInvestor, setNewInvestor] = useState<Investor>({
+    id: 0,
+    first_name: "",
+    last_name: "",
+    email: "",
+    amount_invested: 0,
+  });
+
   const hasInvestors = investors.length > 0;
 
-  const generateInvestors = () => {
-    setInvestors(INVESTORS);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewInvestor((prev) => ({
+      ...prev,
+      [name]: name === "amount_invested" ? parseFloat(value) : value,
+    }));
+  };
+
+  const handleAddInvestor = () => {
+    setInvestors((prev) => [...prev, { ...newInvestor, id: prev.length + 1 }]);
+    setOpenModal(false);
+    setNewInvestor({
+      id: 0,
+      first_name: "",
+      last_name: "",
+      email: "",
+      amount_invested: 0,
+    });
   };
 
   return (
     <>
       <h1 className="text-3xl font-medium">Investors</h1>
+
+      <button
+        onClick={() => setOpenModal(true)}
+        className="text-lg text-violet-600 border-2 border-violet-600 font-medium hover:bg-violet-600 hover:text-white p-4 rounded-xl mt-10 "
+      >
+        <i className={`fi-rr-user-add mt-2 mr-4`}></i>
+        Add Investor
+      </button>
+
       {hasInvestors ? (
         <div className="mt-4">
           <Table>
@@ -76,7 +110,7 @@ export default function InvestorsSection() {
         </div>
       ) : (
         <div className="mt-4 flex flex-col items-center">
-          <p className="mt-20 mb-8 text-gray-500 text-2xl">
+          <p className="mb-8 text-gray-500 text-2xl">
             There are no investors to display.
           </p>
           <div className="bg-slate-100 p-8 mb-8 rounded-3xl">
@@ -124,15 +158,76 @@ export default function InvestorsSection() {
               </defs>
             </svg>
           </div>
-
-          <button
-            onClick={() => generateInvestors()}
-            className=" bg-violet-600 hover:bg-violet-700 text-white p-4 rounded-xl"
-          >
-            Add Investor
-          </button>
         </div>
       )}
+
+      <Modal
+        show={openModal}
+        className="text-gray-900 bg-slate-950 bg-opacity-70"
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Header>Add investor</Modal.Header>
+        <Modal.Body>
+          <form className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                First Name
+              </label>
+              <input
+                type="text"
+                name="first_name"
+                value={newInvestor.first_name}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="last_name"
+                value={newInvestor.last_name}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={newInvestor.email}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Amount Invested
+              </label>
+              <input
+                type="number"
+                name="amount_invested"
+                value={newInvestor.amount_invested}
+                onChange={handleChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button className="bg-purple-700" onClick={handleAddInvestor}>
+            Add Investor
+          </Button>
+          <Button color="gray" onClick={() => setOpenModal(false)}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
