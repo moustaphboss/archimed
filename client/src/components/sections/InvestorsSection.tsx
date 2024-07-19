@@ -259,13 +259,15 @@ export default function InvestorsSection() {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button className="bg-purple-700" onClick={handleAddInvestor}>
-            <i className="fi-rr-disk mr-4 mt-0.5"></i>
-            Save
-          </Button>
-          <Button color="gray" onClick={() => setOpenModal(false)}>
-            Cancel
-          </Button>
+          <div className="flex space-x-4 justify-end w-full">
+            <Button className="bg-purple-700" onClick={handleAddInvestor}>
+              <i className="fi-rr-disk mr-4 mt-0.5"></i>
+              Save
+            </Button>
+            <Button color="gray" onClick={() => setOpenModal(false)}>
+              Cancel
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>
