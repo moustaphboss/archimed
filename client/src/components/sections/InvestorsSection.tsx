@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import { Investor } from "../../utils/interfaces";
-import {
-  Button,
-  Datepicker,
-  Label,
-  Modal,
-  Table,
-  TextInput,
-} from "flowbite-react";
+import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
+import "../../css/custom-datepicker.css";
 
 // const INVESTORS: Investor[] = [
 //   {
@@ -62,7 +56,7 @@ export default function InvestorsSection() {
     last_name: "",
     email: "",
     amount_invested: 0,
-    investment_date: null,
+    investment_date: new Date(),
   });
 
   const hasInvestors = investors.length > 0;
@@ -91,21 +85,22 @@ export default function InvestorsSection() {
       last_name: "",
       email: "",
       amount_invested: 0,
-      investment_date: null,
+      investment_date: new Date(),
     });
   };
 
   return (
     <>
       <h1 className="text-3xl font-medium">Investors</h1>
-
-      <button
-        onClick={() => setOpenModal(true)}
-        className="text-lg text-violet-600 border-2 border-violet-600 font-medium hover:bg-violet-600 hover:text-white p-4 rounded-xl mt-10 "
-      >
-        <i className={`fi-rr-user-add mt-2 mr-4`}></i>
-        Add Investor
-      </button>
+      <div className="flex justify-center">
+        <button
+          onClick={() => setOpenModal(true)}
+          className="text-lg text-violet-600 border-2 border-violet-600 font-medium hover:bg-violet-600 hover:text-white p-4 rounded-xl mt-10 "
+        >
+          <i className={`fi-rr-user-add mr-4`}></i>
+          Add Investor
+        </button>
+      </div>
 
       {hasInvestors ? (
         <div className="mt-4">
@@ -136,10 +131,7 @@ export default function InvestorsSection() {
         </div>
       ) : (
         <div className="mt-4 flex flex-col items-center">
-          <p className="mb-8 text-gray-500 text-2xl">
-            There are no investors to display.
-          </p>
-          <div className="bg-slate-100 p-12 mb-8 rounded-3xl">
+          <div className="bg-slate-100 p-12 my-8 rounded-3xl">
             <svg
               width="90"
               height="90"
@@ -184,6 +176,9 @@ export default function InvestorsSection() {
               </defs>
             </svg>
           </div>
+          <p className=" text-gray-400 text-2xl">
+            There are no investors to display.
+          </p>
         </div>
       )}
 
@@ -192,12 +187,14 @@ export default function InvestorsSection() {
         className="text-gray-900 bg-slate-950 bg-opacity-70"
         onClose={() => setOpenModal(false)}
       >
-        <Modal.Header>Add investor</Modal.Header>
+        <Modal.Header>
+          <h3 className="text-2xl text-gray-600">Add investor</h3>
+        </Modal.Header>
         <Modal.Body>
-          <form className="space-y-8">
+          <form className="space-y-6">
             <div className="flex space-x-4">
               <div className="w-full">
-                <Label className="block text-sm font-medium text-gray-700 mb-1">
+                <Label className="block text-md font-medium text-gray-700 mb-1">
                   First Name
                 </Label>
                 <TextInput
@@ -208,7 +205,7 @@ export default function InvestorsSection() {
                 />
               </div>
               <div className="w-full">
-                <Label className="block text-sm font-medium text-gray-700 mb-1">
+                <Label className="block text-md font-medium text-gray-700 mb-1">
                   Last Name
                 </Label>
                 <TextInput
@@ -216,12 +213,11 @@ export default function InvestorsSection() {
                   name="last_name"
                   value={newInvestor.last_name}
                   onChange={handleChange}
-                  // className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
             </div>
             <div>
-              <Label className="block text-sm font-medium text-gray-700 mb-1">
+              <Label className="block text-md font-medium text-gray-700 mb-1">
                 Email
               </Label>
               <TextInput
@@ -230,12 +226,15 @@ export default function InvestorsSection() {
                 value={newInvestor.email}
                 placeholder="johndoe@archimed.com"
                 onChange={handleChange}
-                // className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                // className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-md"
               />
             </div>
             <div className="flex space-x-4">
               <div className="w-full">
-                <Label className="block text-sm font-medium text-gray-700 mb-1">
+                <Label
+                  htmlFor="amount_invested"
+                  className="block text-md font-medium text-gray-700 mb-1"
+                >
                   Amount Invested ($)
                 </Label>
                 <TextInput
@@ -243,27 +242,18 @@ export default function InvestorsSection() {
                   name="amount_invested"
                   value={newInvestor.amount_invested}
                   onChange={handleChange}
-                  // className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
               <div className="w-full">
-                <div>
-                  <Label className="block text-sm font-medium text-gray-700 mb-1">
-                    Investment Date
-                  </Label>
-                  {/* <DatePicker
-                    selected={newInvestor.investment_date}
-                    onChange={(date: Date) => handleDateChange(date)}
-                    dateFormat="yyyy/MM/dd"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  /> */}
-                  <DatePicker
-                    selected={newInvestor.investment_date}
-                    onChange={handleDateChange}
-                    dateFormat="dd/MM/yyyy"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </div>
+                <Label className="block text-md font-medium text-gray-700 mb-1">
+                  Investment Date
+                </Label>
+                <DatePicker
+                  selected={newInvestor.investment_date}
+                  onChange={handleDateChange}
+                  dateFormat="dd/MM/yyyy"
+                  className="datepicker-input min-w-72 rounded-md sm:text-md"
+                />
               </div>
             </div>
           </form>
