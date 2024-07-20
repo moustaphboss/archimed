@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Investor } from "../../utils/interfaces";
 import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
 import "../../css/custom-datepicker.css";
+import { addInvestor, fetchInvestors } from "../../api/api";
 
 // const INVESTORS: Investor[] = [
 //   {
@@ -51,7 +52,7 @@ export default function InvestorsSection() {
   const [investors, setInvestors] = useState<Investor[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [newInvestor, setNewInvestor] = useState<Investor>({
-    id: 0,
+    id: 10,
     first_name: "",
     last_name: "",
     email: "",
@@ -76,18 +77,28 @@ export default function InvestorsSection() {
     }));
   };
 
-  const handleAddInvestor = () => {
-    setInvestors((prev) => [...prev, { ...newInvestor, id: prev.length + 1 }]);
-    setOpenModal(false);
-    setNewInvestor({
-      id: 0,
-      first_name: "",
-      last_name: "",
-      email: "",
-      amount_invested: 0,
-      investment_date: new Date(),
-    });
+  const handleAddInvestor = async () => {
+    try {
+      const addedInvestor = await addInvestor(newInvestor);
+      setInvestors((prev) => [...prev, addedInvestor]);
+    } catch (error) {
+      console.error("Failed to add investor:", error);
+    }
   };
+
+  useEffect(() => {
+    const loadInvestors = async () => {
+      try {
+        const data = await fetchInvestors();
+        setInvestors(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Failed to load investors:", error);
+      }
+    };
+
+    loadInvestors();
+  }, []);
 
   return (
     <>
@@ -122,7 +133,9 @@ export default function InvestorsSection() {
                   <Table.Cell>{investor.email}</Table.Cell>
                   <Table.Cell>{investor.amount_invested}</Table.Cell>
                   <Table.Cell>
-                    {investor.investment_date?.toDateString()}
+                    {investor.investment_date instanceof Date
+                      ? investor.investment_date.toDateString()
+                      : investor.investment_date}
                   </Table.Cell>
                 </Table.Row>
               ))}
