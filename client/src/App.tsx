@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import "flowbite/dist/flowbite.css";
 import "react-datepicker/dist/react-datepicker.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import Sidebar from "./components/Sidebar";
 import CapitalCallsSection from "./components/sections/CapitalCallsSection";

@@ -4,6 +4,7 @@ import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
 import "../../css/custom-datepicker.css";
 import { addInvestor, fetchInvestors } from "../../api/api";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function InvestorsSection() {
   const [investors, setInvestors] = useState<Investor[]>([]);
@@ -16,6 +17,7 @@ export default function InvestorsSection() {
     amount_invested: 0,
     investment_date: new Date().toISOString().split("T")[0],
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const hasInvestors = investors.length > 0;
 
@@ -35,6 +37,7 @@ export default function InvestorsSection() {
   };
 
   const handleAddInvestor = async () => {
+    setIsLoading(true);
     try {
       const investorToAdd = {
         ...newInvestor,
@@ -47,15 +50,19 @@ export default function InvestorsSection() {
       setInvestors((prev) => [...prev, addedInvestor]);
       setOpenModal(false);
       setNewInvestor({
-        id: 0,
+        id: investors.length + 1,
         first_name: "",
         last_name: "",
         email: "",
         amount_invested: 0,
         investment_date: new Date().toISOString().split("T")[0],
       });
+      toast.success("Investor added successfully!");
     } catch (error) {
       console.error("Failed to add investor:", error);
+      toast.error("Failed to add investor.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -164,6 +171,8 @@ export default function InvestorsSection() {
         </div>
       )}
 
+      <ToastContainer />
+
       <Modal
         show={openModal}
         className="text-gray-900 bg-slate-950 bg-opacity-70"
@@ -245,9 +254,26 @@ export default function InvestorsSection() {
         </Modal.Body>
         <Modal.Footer>
           <div className="flex space-x-4 justify-end w-full">
-            <Button className="bg-purple-700" onClick={handleAddInvestor}>
-              <i className="fi-rr-disk mr-4 mt-0.5"></i>
-              Save
+            <Button
+              className={`${
+                isLoading
+                  ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  : "bg-purple-700 text-white"
+              } flex items-center`}
+              onClick={handleAddInvestor}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="flex items-center">
+                  <i className="fi-rr-menu-dots animate-spin mr-4 mt-0.5"></i>
+                  Saving...
+                </div>
+              ) : (
+                <>
+                  <i className="fi-rr-disk mr-4 mt-0.5"></i>
+                  Save
+                </>
+              )}
             </Button>
             <Button color="gray" onClick={() => setOpenModal(false)}>
               Cancel
