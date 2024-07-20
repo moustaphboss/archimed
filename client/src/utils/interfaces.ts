@@ -6,7 +6,7 @@ export interface Investor {
   last_name: string;
   email: string;
   amount_invested: number;
-  investment_date: Date | null;
+  investment_date: string | null;
 }
 
 export interface Bill {

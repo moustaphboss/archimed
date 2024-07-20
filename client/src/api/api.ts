@@ -24,7 +24,12 @@ export const addInvestor = async (investor: Investor) => {
     });
     console.log(investor);
 
-    if (!response.ok) throw new Error("Network response was not ok");
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Error response:", errorText);
+      throw new Error("Network response was not ok");
+    }
+
     return await response.json();
   } catch (error) {
     console.error("Failed to add investor:", error);
