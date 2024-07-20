@@ -41,10 +41,10 @@ export default function InvestorsSection() {
     try {
       const investorToAdd = {
         ...newInvestor,
-        investment_date: newInvestor.investment_date, // Date is already in YYYY-MM-DD format
+        investment_date: newInvestor.investment_date,
       };
 
-      console.log("Formatted investor data:", investorToAdd); // Log the formatted data
+      console.log("Formatted investor data:", investorToAdd);
       const addedInvestor = await addInvestor(investorToAdd);
 
       setInvestors((prev) => [...prev, addedInvestor]);
