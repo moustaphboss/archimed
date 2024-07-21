@@ -303,7 +303,7 @@ export default function InvestorsSection() {
               className={`${
                 isLoading
                   ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                  : "bg-purple-700 text-white"
+                  : "bg-purple-600 text-white text-xl"
               } flex items-center`}
               onClick={handleAddInvestor}
               disabled={isLoading}
