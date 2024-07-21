@@ -16,6 +16,7 @@ export default function InvestorsSection() {
     email: "",
     amount_invested: 0,
     investment_date: new Date().toISOString().split("T")[0],
+    payment_type: "yearly",
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,6 +57,7 @@ export default function InvestorsSection() {
         email: "",
         amount_invested: 0,
         investment_date: new Date().toISOString().split("T")[0],
+        payment_type: "yearly",
       });
       toast.success("Investor added successfully!");
     } catch (error) {
@@ -248,6 +250,46 @@ export default function InvestorsSection() {
                   dateFormat="dd/MM/yyyy"
                   className="datepicker-input min-w-72 rounded-md sm:text-md"
                 />
+              </div>
+            </div>
+
+            <div>
+              <Label className="block text-md font-medium text-gray-700 mb-2">
+                Payment Type
+              </Label>
+              <div className="flex space-x-0">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setNewInvestor((prev) => ({
+                      ...prev,
+                      payment_type: "yearly",
+                    }))
+                  }
+                  className={`px-4 py-2 rounded-l-full text-sm font-medium ${
+                    newInvestor.payment_type === "yearly"
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  Yearly
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setNewInvestor((prev) => ({
+                      ...prev,
+                      payment_type: "upfront",
+                    }))
+                  }
+                  className={`px-4 py-2 rounded-r-full text-sm font-medium ${
+                    newInvestor.payment_type === "upfront"
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  Upfront
+                </button>
               </div>
             </div>
           </form>

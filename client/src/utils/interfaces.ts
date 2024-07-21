@@ -1,4 +1,4 @@
-import { Status } from "./types";
+import { PaymentType, Status } from "./types";
 
 export interface Investor {
   id: number;
@@ -7,6 +7,7 @@ export interface Investor {
   email: string;
   amount_invested: number;
   investment_date: string | null;
+  payment_type: PaymentType;
 }
 
 export interface Bill {
