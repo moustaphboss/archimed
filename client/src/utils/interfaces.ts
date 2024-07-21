@@ -12,7 +12,7 @@ export interface Investor {
 
 export interface Bill {
   id: number;
-  investor_id: number;
+  investor: number;
   type: string;
   amount: number;
   validated: boolean;

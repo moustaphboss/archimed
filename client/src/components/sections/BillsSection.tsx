@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bill } from "../../utils/interfaces";
-import { Table, Button } from "flowbite-react";
+import { Table } from "flowbite-react";
 import { generateBills, fetchBills } from "../../api/bills-api";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -26,6 +26,7 @@ export default function BillsSection() {
     try {
       const fetchedBills = await fetchBills();
       setBills(fetchedBills);
+      console.log(fetchedBills);
     } catch (error) {
       toast.error("Failed to fetch bills.");
     }
@@ -72,7 +73,7 @@ export default function BillsSection() {
               {bills.map((bill) => (
                 <Table.Row key={bill.id}>
                   <Table.Cell>{bill.id}</Table.Cell>
-                  <Table.Cell>{bill.investor_id}</Table.Cell>
+                  <Table.Cell>{bill.investor}</Table.Cell>
                   <Table.Cell>{bill.type}</Table.Cell>
                   <Table.Cell>{bill.amount}</Table.Cell>
                   <Table.Cell>{bill.validated ? "Yes" : "No"}</Table.Cell>

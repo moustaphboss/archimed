@@ -17,6 +17,8 @@ class GenerateBillsView(APIView):
     def post(self, request):
         investors = Investor.objects.all()
         current_year = datetime.date.today().year
+        fee_percentage = decimal.Decimal('0.02')
+
 
         for investor in investors:
             investment_date = investor.investment_date
@@ -34,7 +36,7 @@ class GenerateBillsView(APIView):
 
             if investor.payment_type == 'upfront':
                 # Upfront fee calculation
-                upfront_fee = decimal.Decimal('0.05') * amount_invested  # Replace with your actual upfront fee calculation
+                upfront_fee = decimal.Decimal('0.02') * amount_invested * 5  # Replace with your actual upfront fee calculation
                 Bill.objects.create(
                     investor=investor,
                     type='upfront',
@@ -47,7 +49,7 @@ class GenerateBillsView(APIView):
                 end_date = datetime.date(current_year, 12, 31)
                 days_in_year = (end_date - start_date).days + 1
                 total_days = 366 if start_date.year % 4 == 0 else 365
-                fee_percentage = decimal.Decimal('0.02')  # Replace with your actual fee percentage
+                  # Replace with your actual fee percentage
                 fee = (decimal.Decimal(days_in_year) / decimal.Decimal(total_days)) * fee_percentage * amount_invested
                 Bill.objects.create(
                     investor=investor,
