@@ -3,7 +3,7 @@ import { Investor } from "../../utils/interfaces";
 import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
 import "../../css/custom-datepicker.css";
-import { addInvestor, fetchInvestors } from "../../api/api";
+import { addInvestor, fetchInvestors } from "../../api/investors-api";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function InvestorsSection() {
