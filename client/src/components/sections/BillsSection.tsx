@@ -63,19 +63,21 @@ export default function BillsSection() {
         <div className="mt-4">
           <Table>
             <Table.Head>
-              <Table.HeadCell>Bill Id</Table.HeadCell>
+              <Table.HeadCell>Bill Code</Table.HeadCell>
               <Table.HeadCell>Investor Id</Table.HeadCell>
               <Table.HeadCell>Type</Table.HeadCell>
               <Table.HeadCell>Amount</Table.HeadCell>
+              <Table.HeadCell>Issue Date</Table.HeadCell>
               <Table.HeadCell>Validated</Table.HeadCell>
             </Table.Head>
             <Table.Body>
               {bills.map((bill) => (
                 <Table.Row key={bill.id}>
-                  <Table.Cell>{bill.id}</Table.Cell>
+                  <Table.Cell>{bill.bill_code}</Table.Cell>
                   <Table.Cell>{bill.investor}</Table.Cell>
                   <Table.Cell>{bill.type}</Table.Cell>
                   <Table.Cell>{bill.amount}</Table.Cell>
+                  <Table.Cell>{bill.issue_date}</Table.Cell>
                   <Table.Cell>{bill.validated ? "Yes" : "No"}</Table.Cell>
                 </Table.Row>
               ))}

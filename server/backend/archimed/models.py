@@ -27,6 +27,8 @@ class Bill(models.Model):
     type = models.CharField(max_length=10, choices=BILL_TYPE_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     validated = models.BooleanField(default=False)
+    issue_date = models.DateField()
+    bill_code = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return f"Bill for {self.investor} - Type: {self.type} - Amount: {self.amount} - Validated: {self.validated}"

@@ -16,6 +16,8 @@ export interface Bill {
   type: string;
   amount: number;
   validated: boolean;
+  issue_date: string | null;
+  bill_code: string;
 }
 
 export interface CapitalCall {
