@@ -159,7 +159,19 @@ class GenerateBillsView(APIView):
 
         return Response({'message': 'Bills generated successfully'}, status=status.HTTP_201_CREATED)
 class BillsListView(APIView):
+
+    
     def get(self, request):
         bills = Bill.objects.all()
         serializer = BillSerializer(bills, many=True)
         return Response(serializer.data)
+    
+class ValidateBillView(APIView):
+    def post(self, request, bill_id):
+        try:
+            bill = Bill.objects.get(id=bill_id)
+            bill.validated = True
+            bill.save()
+            return Response({'message': 'Bill validated successfully'}, status=status.HTTP_200_OK)
+        except Bill.DoesNotExist:
+            return Response({'error': 'Bill not found'}, status=status.HTTP_404_NOT_FOUND)

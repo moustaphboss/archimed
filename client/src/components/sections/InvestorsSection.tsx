@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "../../css/custom-datepicker.css";
 import { addInvestor, fetchInvestors } from "../../api/investors-api";
 import { toast, ToastContainer } from "react-toastify";
+import { formatCurrency } from "../../utils/utils";
 
 export default function InvestorsSection() {
   const [investors, setInvestors] = useState<Investor[]>([]);
@@ -113,7 +114,9 @@ export default function InvestorsSection() {
                   <Table.Cell>{investor.first_name}</Table.Cell>
                   <Table.Cell>{investor.last_name}</Table.Cell>
                   <Table.Cell>{investor.email}</Table.Cell>
-                  <Table.Cell>{investor.amount_invested}</Table.Cell>
+                  <Table.Cell>
+                    {formatCurrency(investor.amount_invested)}
+                  </Table.Cell>
                   <Table.Cell>{investor.investment_date}</Table.Cell>
                 </Table.Row>
               ))}

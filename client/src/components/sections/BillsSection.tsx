@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Bill } from "../../utils/interfaces";
-import { Table } from "flowbite-react";
-import { generateBills, fetchBills } from "../../api/bills-api";
+import { Button, Table } from "flowbite-react";
+import { generateBills, fetchBills, validateBill } from "../../api/bills-api";
 import { toast, ToastContainer } from "react-toastify";
+import { formatCurrency } from "../../utils/utils";
 
 export default function BillsSection() {
   const [bills, setBills] = useState<Bill[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const hasBills = bills.length > 0;
+
+  const handleValidate = async (billId: number) => {
+    try {
+      await validateBill(billId);
+      fetchBills(); // Refresh the bills list after validation
+      toast.success("Bill validated successfully!");
+    } catch (error) {
+      console.error("Failed to validate bill:", error);
+      toast.error("Failed to validate bills");
+    }
+  };
 
   const handleGenerateBills = async () => {
     setIsLoading(true);
@@ -76,9 +88,23 @@ export default function BillsSection() {
                   <Table.Cell>{bill.bill_code}</Table.Cell>
                   <Table.Cell>{bill.investor}</Table.Cell>
                   <Table.Cell>{bill.type}</Table.Cell>
-                  <Table.Cell>{bill.amount}</Table.Cell>
+                  <Table.Cell>{formatCurrency(bill.amount)}</Table.Cell>
                   <Table.Cell>{bill.issue_date}</Table.Cell>
-                  <Table.Cell>{bill.validated ? "Yes" : "No"}</Table.Cell>
+                  <Table.Cell>
+                    {!bill.validated && (
+                      <Button
+                        className="border-violet-600 text-violet-600 rounded-full"
+                        onClick={() => handleValidate(bill.id)}
+                      >
+                        Validate
+                      </Button>
+                    )}
+                    {bill.validated && (
+                      <span className="bg-green-100 px-4 py-2 text-green-800 rounded-full">
+                        Validated
+                      </span>
+                    )}
+                  </Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>
