@@ -17,7 +17,6 @@ class GenerateBillsView(APIView):
         current_date = datetime.date.today()
 
         try:
-            # Retrieving the company fee percentage
             company = Company.objects.first()
             if company is None:
                 return Response({'error': 'Company not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -39,39 +38,42 @@ class GenerateBillsView(APIView):
 
                 # Generate a membership bill for the first year on the investment date
                 bill_code = f"{investment_date.strftime('%b_%Y')}_membership_{last_name}{investor_id}"
-                Bill.objects.get_or_create(
-                    investor=investor,
-                    type='membership',
-                    amount=3000,
-                    bill_code=bill_code,
-                    issue_date=investment_date,
-                    validated=False
-                )
-
-                # Generate a membership bill for each subsequent year on January 1st
-                for year in range(start_year + 1, end_year + 1):
-                    bill_code = f"Jan_{year}_membership_{last_name}{investor_id}"
-                    Bill.objects.get_or_create(
+                if not Bill.objects.filter(bill_code=bill_code).exists():
+                    Bill.objects.create(
                         investor=investor,
                         type='membership',
                         amount=3000,
                         bill_code=bill_code,
-                        issue_date=datetime.date(year, 1, 1),
+                        issue_date=investment_date,
                         validated=False
                     )
+
+                # Generate a membership bill for each subsequent year on January 1st
+                for year in range(start_year + 1, end_year + 1):
+                    bill_code = f"Jan_{year}_membership_{last_name}{investor_id}"
+                    if not Bill.objects.filter(bill_code=bill_code).exists():
+                        Bill.objects.create(
+                            investor=investor,
+                            type='membership',
+                            amount=3000,
+                            bill_code=bill_code,
+                            issue_date=datetime.date(year, 1, 1),
+                            validated=False
+                        )
 
             if investor.payment_type == 'upfront':
                 # --- Upfront fee calculation ---
                 upfront_fee = fee_percentage * amount_invested * 5
                 bill_code = f"{investment_date.strftime('%b_%Y')}_upfront_{last_name}{investor_id}"
-                Bill.objects.get_or_create(
-                    investor=investor,
-                    type='upfront',
-                    amount=upfront_fee,
-                    bill_code=bill_code,
-                    issue_date=investment_date,
-                    validated=False
-                )
+                if not Bill.objects.filter(bill_code=bill_code).exists():
+                    Bill.objects.create(
+                        investor=investor,
+                        type='upfront',
+                        amount=upfront_fee,
+                        bill_code=bill_code,
+                        issue_date=investment_date,
+                        validated=False
+                    )
             else:
                 # --- Yearly fee calculation ---
                 start_date = investment_date
@@ -89,14 +91,15 @@ class GenerateBillsView(APIView):
                         else:
                             fee = fee_percentage * amount_invested
                             issue_date = datetime.date(year, 1, 1)
-                        Bill.objects.get_or_create(
-                            investor=investor,
-                            type='yearly',
-                            amount=fee,
-                            bill_code=bill_code,
-                            issue_date=issue_date,
-                            validated=False
-                        )
+                        if not Bill.objects.filter(bill_code=bill_code).exists():
+                            Bill.objects.create(
+                                investor=investor,
+                                type='yearly',
+                                amount=fee,
+                                bill_code=bill_code,
+                                issue_date=issue_date,
+                                validated=False
+                            )
                 else:
                     for year in range(start_date.year, current_date.year + 1):
                         bill_code = f"{start_date.strftime('%b')}_{year}_yearly_{last_name}{investor_id}"
@@ -118,17 +121,17 @@ class GenerateBillsView(APIView):
                         else:
                             fee = (fee_percentage - Decimal('0.01')) * amount_invested
                             issue_date = datetime.date(year, 1, 1)
-                        Bill.objects.get_or_create(
-                            investor=investor,
-                            type='yearly',
-                            amount=fee,
-                            bill_code=bill_code,
-                            issue_date=issue_date,
-                            validated=False
-                        )
+                        if not Bill.objects.filter(bill_code=bill_code).exists():
+                            Bill.objects.create(
+                                investor=investor,
+                                type='yearly',
+                                amount=fee,
+                                bill_code=bill_code,
+                                issue_date=issue_date,
+                                validated=False
+                            )
 
         return Response({'message': 'Bills generated successfully'}, status=status.HTTP_201_CREATED)
-
 class BillsListView(APIView):
     def get(self, request):
         bills = Bill.objects.all().order_by('validated')
