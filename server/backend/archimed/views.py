@@ -131,7 +131,7 @@ class GenerateBillsView(APIView):
 
 class BillsListView(APIView):
     def get(self, request):
-        bills = Bill.objects.all()
+        bills = Bill.objects.all().order_by('validated')
         serializer = BillSerializer(bills, many=True)
         return Response(serializer.data)
     
