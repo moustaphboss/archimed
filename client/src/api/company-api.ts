@@ -2,11 +2,17 @@ import { Company } from "../utils/interfaces";
 
 const API_URL = "http://127.0.0.1:8000/api/company/";
 
-export const fetchCompanyInfo = async (): Promise<Company> => {
+export const fetchCompanyInfo = async (): Promise<Company | null> => {
   try {
     const response = await fetch(API_URL);
     if (!response.ok) throw new Error("Network response was not ok");
-    return await response.json();
+    const data = await response.json();
+
+    if (Array.isArray(data) && data.length === 0) {
+      return null;
+    }
+
+    return data[0];
   } catch (error) {
     console.error("Failed to fetch company info:", error);
     throw error;

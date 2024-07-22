@@ -52,6 +52,7 @@ export default function CapitalCallsSection() {
       setIsLoading(false);
     }
   };
+  console.log(company);
 
   return (
     <>
