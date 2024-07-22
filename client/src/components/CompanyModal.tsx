@@ -1,5 +1,3 @@
-// src/components/CompanyModal.tsx
-
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import React, { useState, ChangeEvent } from "react";
 
@@ -12,7 +10,7 @@ interface CompanyModalProps {
   onClose: () => void;
   companyData: Company;
   setCompanyData: React.Dispatch<React.SetStateAction<Company>>;
-  onCompanyInfoSaved: () => void; // Callback to handle the save operation
+  onCompanyInfoSaved: () => void;
 }
 
 const CompanyModal: React.FC<CompanyModalProps> = ({
@@ -37,8 +35,8 @@ const CompanyModal: React.FC<CompanyModalProps> = ({
     try {
       await saveCompanyInfo(companyData);
       toast.success("Company info saved successfully!");
-      onCompanyInfoSaved(); // Notify parent component of success
-      onClose(); // Close the modal
+      onCompanyInfoSaved();
+      onClose();
     } catch (error) {
       toast.error("Failed to save company info.");
     } finally {

@@ -45,11 +45,14 @@ export default function BillsSection() {
   };
 
   const loadBills = async () => {
+    setIsLoading(true);
     try {
       const fetchedBills = await fetchBills();
       setBills(fetchedBills);
     } catch (error) {
       toast.error("Failed to fetch bills.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,6 +62,7 @@ export default function BillsSection() {
 
   useEffect(() => {
     const loadCompanyInfo = async () => {
+      setIsLoading(true);
       try {
         const fetchedCompany = await fetchCompanyInfo();
         if (fetchedCompany) {
@@ -67,6 +71,8 @@ export default function BillsSection() {
         }
       } catch (error) {
         toast.error("Failed to load company info.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -104,15 +110,15 @@ export default function BillsSection() {
         <>
           {hasBills ? (
             <div className="mt-4">
-              <div className="bg-violet-100 mb-4 p-4 rounded-lg flex space-x-4 justify-center content-center">
-                <i className="fi-rr-info text-violet-600 mt-1 text-xl"></i>
-                <p className="text-lg font-medium text-violet-700">
+              <div className="bg-violet-100 mb-4 p-4 rounded-lg flex space-x-4 justify-center items-center">
+                <i className="fi-rr-info text-violet-600 mt-1 text-2xl"></i>
+                <p className="text-lg font-regular text-violet-700">
                   The list of bills is dynamically generated. Refresh to see if
                   there are new bills :)
                 </p>
               </div>
 
-              <Table>
+              <Table striped>
                 <Table.Head>
                   <Table.HeadCell>Bill Code</Table.HeadCell>
                   <Table.HeadCell>Investor Id</Table.HeadCell>

@@ -98,7 +98,7 @@ export default function InvestorsSection() {
 
       {hasInvestors ? (
         <div className="mt-4">
-          <Table>
+          <Table striped>
             <Table.Head>
               <Table.HeadCell>Investor Id</Table.HeadCell>
               <Table.HeadCell>First Name</Table.HeadCell>
