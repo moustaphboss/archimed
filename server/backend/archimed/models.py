@@ -32,3 +32,11 @@ class Bill(models.Model):
 
     def __str__(self):
         return f"Bill for {self.investor} - Type: {self.type} - Amount: {self.amount} - Validated: {self.validated}"
+
+class Company(models.Model):
+    name = models.CharField(max_length=255)
+    fee_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    iban = models.CharField(max_length=34)
+
+    def __str__(self):
+        return self.name

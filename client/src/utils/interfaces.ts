@@ -20,6 +20,13 @@ export interface Bill {
   bill_code: string;
 }
 
+export interface Company {
+  id?: number;
+  name: string;
+  fee_percentage: number;
+  iban: string;
+}
+
 export interface CapitalCall {
   id: number;
   investor_id: number;

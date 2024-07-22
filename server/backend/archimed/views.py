@@ -1,11 +1,11 @@
 from rest_framework import viewsets
-from .models import Investor
-from .serializers import InvestorSerializer
+
+from .models import Investor, Bill, Company
+from .serializers import InvestorSerializer, BillSerializer, CompanySerializer
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Investor, Bill
-from .serializers import BillSerializer
 import datetime
 import decimal
 
@@ -175,3 +175,8 @@ class ValidateBillView(APIView):
             return Response({'message': 'Bill validated successfully'}, status=status.HTTP_200_OK)
         except Bill.DoesNotExist:
             return Response({'error': 'Bill not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer

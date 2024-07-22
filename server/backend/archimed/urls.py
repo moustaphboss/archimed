@@ -1,10 +1,11 @@
 # server/backend/archimed/urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import InvestorViewSet, GenerateBillsView, BillsListView, ValidateBillView
+from .views import InvestorViewSet, GenerateBillsView, BillsListView, ValidateBillView, CompanyViewSet
 
 router = DefaultRouter()
 router.register(r'investors', InvestorViewSet)
+router.register(r'company', CompanyViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
