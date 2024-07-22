@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Bill } from "../../utils/interfaces";
+import { Bill, Company } from "../../utils/interfaces";
 import { Button, Table } from "flowbite-react";
 import { generateBills, fetchBills, validateBill } from "../../api/bills-api";
 import { toast, ToastContainer } from "react-toastify";
 import { formatCurrency } from "../../utils/utils";
+import { fetchCompanyInfo, saveCompanyInfo } from "../../api/company-api";
 
 export default function BillsSection() {
   const [bills, setBills] = useState<Bill[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [openModal, setOpenModal] = useState(false);
+  const [company, setCompany] = useState<Company | null>(null);
+  const [companyData, setCompanyData] = useState<Company>({
+    id: 0,
+    name: "",
+    fee_percentage: 0,
+    iban: "",
+  });
+
   const hasBills = bills.length > 0;
 
   const handleValidate = async (billId: number) => {
@@ -47,6 +58,44 @@ export default function BillsSection() {
   useEffect(() => {
     loadBills();
   }, []);
+
+  useEffect(() => {
+    const loadCompanyInfo = async () => {
+      try {
+        const fetchedCompany = await fetchCompanyInfo();
+        if (fetchedCompany) {
+          setCompany(fetchedCompany);
+          setCompanyData(fetchedCompany);
+        }
+      } catch (error) {
+        toast.error("Failed to load company info.");
+      }
+    };
+
+    loadCompanyInfo();
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCompanyData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveCompanyInfo = async () => {
+    setIsLoading(true);
+    try {
+      const savedCompany = await saveCompanyInfo(companyData);
+      setCompany(savedCompany);
+      toast.success("Company info saved successfully!");
+      setOpenModal(false);
+    } catch (error) {
+      toast.error("Failed to save company info.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -159,6 +208,7 @@ export default function BillsSection() {
           </p>
         </div>
       )}
+
       <ToastContainer />
     </>
   );
