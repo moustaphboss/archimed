@@ -3,6 +3,7 @@ import { fetchCompanyInfo } from "../../api/company-api";
 import { Company } from "../../utils/interfaces";
 import { toast, ToastContainer } from "react-toastify";
 import CompanyModal from "../CompanyModal";
+import CompanyInfo from "../CompanyInfo";
 
 export default function CapitalCallsSection() {
   const [openModal, setOpenModal] = useState(false);
@@ -39,7 +40,7 @@ export default function CapitalCallsSection() {
         }
       })
       .catch((error) => {
-        toast.error("Failed to refresh company info.");
+        console.error("Failed to refresh company info.");
       });
   };
 
@@ -47,16 +48,7 @@ export default function CapitalCallsSection() {
     <>
       <h1 className="text-3xl font-medium mb-6">Capital Calls</h1>
       {company ? (
-        <div className="bg-violet-100 rounded-xl p-8 text-center">
-          <h4 className="text-gray-800 text-2xl mb-4 font-medium">
-            Company Information
-          </h4>
-          <p className="text-gray-700">Name: {company.name}</p>
-          <p className="text-gray-700">
-            Fee Percentage: {company.fee_percentage}%
-          </p>
-          <p className="text-gray-700">IBAN: {company.iban}</p>
-        </div>
+        <CompanyInfo company={company} />
       ) : (
         <div className="bg-violet-100 rounded-xl p-8 text-center">
           <h4 className="text-gray-800 text-2xl mb-4 font-medium">
