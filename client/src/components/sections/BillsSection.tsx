@@ -25,7 +25,7 @@ export default function BillsSection() {
     try {
       await validateBill(billId);
       loadBills();
-      toast.success("Bill validated successfully!");
+      toast.success("Bill validated!");
     } catch (error) {
       console.error("Failed to validate bill:", error);
       toast.error("Failed to validate bills");

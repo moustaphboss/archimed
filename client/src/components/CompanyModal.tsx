@@ -1,5 +1,6 @@
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import React, { useState, ChangeEvent } from "react";
+import IBAN from "iban";
 
 import { toast } from "react-toastify";
 import { Company } from "../utils/interfaces";
@@ -21,6 +22,7 @@ const CompanyModal: React.FC<CompanyModalProps> = ({
   onCompanyInfoSaved,
 }) => {
   const [localIsLoading, setLocalIsLoading] = useState(false);
+  const [ibanError, setIbanError] = useState<string | null>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,9 +30,23 @@ const CompanyModal: React.FC<CompanyModalProps> = ({
       ...prevData,
       [name]: value,
     }));
+
+    if (name === "iban") {
+      // Validate IBAN as the user types
+      if (IBAN.isValid(value)) {
+        setIbanError(null);
+      } else {
+        setIbanError("Invalid IBAN format.");
+      }
+    }
   };
 
   const handleSaveCompanyInfo = async () => {
+    if (!IBAN.isValid(companyData.iban)) {
+      setIbanError("Please enter a valid IBAN.");
+      return;
+    }
+
     setLocalIsLoading(true);
     try {
       await saveCompanyInfo(companyData);
@@ -92,7 +108,11 @@ const CompanyModal: React.FC<CompanyModalProps> = ({
               name="iban"
               value={companyData.iban}
               onChange={handleInputChange}
+              className={ibanError ? "border-red-500" : ""}
             />
+            {ibanError && (
+              <span className="text-red-500 text-sm">{ibanError}</span>
+            )}
           </div>
         </form>
       </Modal.Body>

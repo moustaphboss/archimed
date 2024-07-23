@@ -1,5 +1,6 @@
 import React from "react";
 import { Company } from "../utils/interfaces";
+import IBAN from "iban";
 
 interface CompanyInfoProps {
   company: Company;
@@ -27,7 +28,9 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({ company, onEditClick }) => {
         </div>
         <div>
           <h5 className="text-violet-200">IBAN</h5>
-          <p className="text-white font-medium text-lg">{company.iban}</p>
+          <p className="text-white font-medium text-lg">
+            {IBAN.printFormat(company.iban)}
+          </p>
         </div>
       </div>
 

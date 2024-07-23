@@ -10,6 +10,7 @@ import CompanyModal from "../CompanyModal";
 import CompanyInfo from "../CompanyInfo";
 import { formatCurrency } from "../../utils/utils";
 import { createCapitalCall } from "../../api/capitalcall-api";
+import CapitalCallBox from "../CapitalCallBox";
 
 export default function CapitalCallsSection() {
   const [openModal, setOpenModal] = useState(false);
@@ -275,33 +276,10 @@ export default function CapitalCallsSection() {
                 </div>
               ) : (
                 capitalCalls.map((capitalCall) => (
-                  <div
+                  <CapitalCallBox
                     key={capitalCall.id}
-                    className="rounded-xl p-4 mb-4 bg-white shadow-sm"
-                  >
-                    <h4 className="text-lg font-semibold mb-2">
-                      {capitalCall.first_name} {capitalCall.last_name}
-                    </h4>
-                    <p>
-                      <strong>Company:</strong> {capitalCall.company_name}
-                    </p>
-                    <p>
-                      <strong>IBAN:</strong> {capitalCall.company_iban}
-                    </p>
-                    <p>
-                      <strong>Date:</strong> {capitalCall.date}
-                    </p>
-                    <p>
-                      <strong>Due Date:</strong> {capitalCall.due_date}
-                    </p>
-                    <p>
-                      <strong>Total Amount:</strong>{" "}
-                      {formatCurrency(capitalCall.total_amount)}
-                    </p>
-                    <p>
-                      <strong>Status:</strong> {capitalCall.status}
-                    </p>
-                  </div>
+                    capitalCall={capitalCall}
+                  />
                 ))
               )}
             </div>
