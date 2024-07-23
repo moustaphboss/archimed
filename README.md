@@ -14,9 +14,15 @@ This project is designed to automate the process of sending capital call invoice
 
 Here's a UML Class diagram that represents how the different entities of our system interact with each other.
 
-![Project Logo](UML.jpg)
+![UML Class Diagram](UML_diag.jpg)
 
 ## Screenshots
+
+### Investors interface
+
+### Bills Page
+
+### Capital Calls Interface
 
 ## Assumptions
 
