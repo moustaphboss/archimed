@@ -20,19 +20,24 @@ Here's a UML Class diagram that represents how the different entities of our sys
 
 ### Investors interface
 
+First, start by creating Investors. We already have some investors in our database but let's create a new one anyways.
 ![Investor](screenshots/inv1.png)
 ![Investor](screenshots/inv2.png)
 ![Investor](screenshots/inv3.png)
 
 ### Bills Page
 
+The bills page generates automatically the necessary bills for every investor. But before that, we have to set up some general company information, including the fee_percentage we use to calculate the bills amounts and also the IBAN that is going to be linked to our capital calls.
 ![Bills](screenshots/bill1.png)
 ![Bills](screenshots/bill2.png)
 ![Bills](screenshots/bill3.png)
+Once the company information have been set up, the bills are generated accordingly.
 ![Bills](screenshots/bill4.png)
+From here, we can validate bills, those ones will then be available for capital calls.
 
 ### Capital Calls Interface
 
+On this page, we group the validated bills by investor. The user has the option to pick what bill will be part of the capital call. The generated capital call will then be featured on the section on the right hand side of this page where we display the pieces of information relevant to a capital call.
 ![Capital Calls](screenshots/cap1.png)
 ![Capital Calls](screenshots/cap2.png)
 ![Capital Calls](screenshots/cap3.png)
