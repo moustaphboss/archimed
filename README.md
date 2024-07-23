@@ -28,29 +28,41 @@ To run the application, you'll need to set up both the frontend (React) and back
 
 #### 1 Navigate to the `client` directory:
 
-`bash cd "/client" `
+```bash
+cd "/client"
+```
 
 #### 2 Start the development server:
 
-`bash npm start`
+```bash
+npm start
+```
 
 ### Backend Setup
 
 #### 1 Navigate to the server directory:
 
-`bash cd server`
+```bash
+cd server
+```
 
 #### 2 Activate the virtual environment:
 
-`bash source venv/bin/activate`
+```bash
+source venv/bin/activate
+```
 
 #### 3 Navigate to the backend directory:
 
-`bash cd backend`
+```bash
+cd backend
+```
 
 #### 4 Install the necessary Python packages:
 
-`bash pip install -r requirements.txt`
+```bash
+pip install -r requirements.txt
+```
 
 #### 5 Set up the PostgreSQL database with the following credentials:
 
@@ -59,8 +71,12 @@ Password: passer
 
 #### 6 Run database migrations:
 
-`bash python manage.py migrate`
+```bash
+python manage.py migrate
+```
 
 #### 7 Start the Django development server:
 
-`bash python manage.py runserver`
+```bash
+python manage.py runserver
+```
