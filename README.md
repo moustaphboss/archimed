@@ -26,8 +26,49 @@ To run the application, you'll need to set up both the frontend (React) and back
 
 ### Frontend Setup
 
-#### Navigate to the `client` directory:
+#### 1 Navigate to the `client` directory:
 
 ```bash
 cd "/Users/moustaphakebe/Documents/Job Hunt/Archimed/archimed-case-study/client"
 ```
+
+#### 2 Start the development server:
+
+```bash
+cd "/Users/moustaphakebe/Documents/Job Hunt/Archimed/archimed-case-study/client"
+```
+
+#### 3 Start the development server:
+
+`npm start`
+
+### Backend Setup
+
+#### 1 Navigate to the server directory:
+
+`cd server`
+
+#### 2 Activate the virtual environment:
+
+`source venv/bin/activate`
+
+#### 3 Navigate to the backend directory:
+
+`cd backend`
+
+#### 4 Install the necessary Python packages:
+
+`pip install -r requirements.txt`
+
+#### 5 Set up the PostgreSQL database with the following credentials:
+
+Username: postgres
+Password: passer
+
+#### 6 Run database migrations:
+
+`python manage.py migrate`
+
+#### 7 Start the Django development server:
+
+`python manage.py runserver`
