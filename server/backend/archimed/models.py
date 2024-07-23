@@ -40,3 +40,24 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+    
+class CapitalCall(models.Model):
+    STATUS_CHOICES = [
+        ('validated', 'Validated'),
+        ('sent', 'Sent'),
+        ('paid', 'Paid'),
+        ('overdue', 'Overdue'),
+    ]
+
+    company_name = models.CharField(max_length=255)
+    company_iban = models.CharField(max_length=34)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    date = models.DateField(auto_now_add=True)
+    due_date = models.DateField()
+    total_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='sent')
+
+    def __str__(self):
+        return f"{self.company_name} - {self.first_name} {self.last_name} - {self.date}"

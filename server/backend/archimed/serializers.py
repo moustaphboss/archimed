@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Investor, Bill, Company
+from .models import Investor, Bill, Company, CapitalCall
 
 class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,4 +15,9 @@ class BillSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
+        fields = '__all__'
+
+class CapitalCallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CapitalCall
         fields = '__all__'

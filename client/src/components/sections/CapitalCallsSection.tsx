@@ -8,6 +8,7 @@ import { Accordion, Checkbox, Spinner, Table } from "flowbite-react";
 import CompanyModal from "../CompanyModal";
 import CompanyInfo from "../CompanyInfo";
 import { formatCurrency } from "../../utils/utils";
+import { createCapitalCall } from "../../api/capitalcall-api";
 
 export default function CapitalCallsSection() {
   const [openModal, setOpenModal] = useState(false);
@@ -106,6 +107,49 @@ export default function CapitalCallsSection() {
     return Object.values(selectedBills).some((isSelected) => isSelected);
   };
 
+  const handleCreateCapitalCall = async (investor: Investor) => {
+    try {
+      const today = new Date().toISOString().split("T")[0];
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + 30);
+      const formattedDueDate = dueDate.toISOString().split("T")[0];
+
+      const selectedBillsForInvestor = getValidatedBillsForInvestor(
+        investor.id
+      ).filter((bill) => selectedBills[bill.id]);
+
+      const totalAmount = selectedBillsForInvestor.reduce(
+        (sum, bill) =>
+          sum +
+          (typeof bill.amount === "string"
+            ? parseFloat(bill.amount)
+            : bill.amount),
+        0
+      );
+
+      const capitalCallData = {
+        company_name: company?.name || "",
+        company_iban: company?.iban || "",
+        date: today,
+        due_date: formattedDueDate,
+        first_name: investor.first_name,
+        last_name: investor.last_name,
+        email: investor.email,
+        total_amount: totalAmount,
+        status: "sent",
+      };
+
+      await createCapitalCall(capitalCallData);
+      toast.success("Capital call created successfully.");
+    } catch (error) {
+      toast.error("Failed to create capital call.");
+    }
+  };
+
+  const handleClickCreateCapitalCall = (investor: Investor) => {
+    handleCreateCapitalCall(investor);
+  };
+
   return (
     <>
       <h1 className="text-3xl font-medium mb-6">Capital Calls</h1>
@@ -183,6 +227,9 @@ export default function CapitalCallsSection() {
                           <button
                             className="bg-violet-600 text-white rounded-xl p-3 disabled:bg-violet-300 disabled:cursor-not-allowed"
                             disabled={!isAnyBillSelected()}
+                            onClick={() =>
+                              handleClickCreateCapitalCall(investor)
+                            }
                           >
                             Create Capital Call
                           </button>

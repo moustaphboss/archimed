@@ -158,7 +158,7 @@ export default function BillsSection() {
           ) : (
             <div className="mt-4 flex flex-col items-center">
               <p className="mt-20 mb-8 text-gray-500 text-2xl">
-                There are no bills to display.
+                There are no bills to display. Start by adding investors :)
               </p>
             </div>
           )}

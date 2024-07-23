@@ -1,6 +1,6 @@
-from rest_framework import viewsets
-from .models import Investor, Bill, Company
-from .serializers import InvestorSerializer, BillSerializer, CompanySerializer
+from rest_framework import viewsets, generics
+from .models import Investor, Bill, Company, CapitalCall
+from .serializers import InvestorSerializer, BillSerializer, CompanySerializer, CapitalCallSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -36,7 +36,7 @@ class GenerateBillsView(APIView):
                 start_year = investment_date.year
                 end_year = current_date.year
 
-                # Generate a membership bill for the first year on the investment date
+                # Generatingg a membership bill for the first year on the investment date
                 bill_code = f"{investment_date.strftime('%b_%Y')}_membership_{last_name}{investor_id}"
                 if not Bill.objects.filter(bill_code=bill_code).exists():
                     Bill.objects.create(
@@ -48,7 +48,7 @@ class GenerateBillsView(APIView):
                         validated=False
                     )
 
-                # Generate a membership bill for each subsequent year on January 1st
+                # Generating a membership bill for each subsequent year on January 1st
                 for year in range(start_year + 1, end_year + 1):
                     bill_code = f"Jan_{year}_membership_{last_name}{investor_id}"
                     if not Bill.objects.filter(bill_code=bill_code).exists():
@@ -151,3 +151,7 @@ class ValidateBillView(APIView):
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+
+class CapitalCallListCreateView(generics.ListCreateAPIView):
+    queryset = CapitalCall.objects.all()
+    serializer_class = CapitalCallSerializer
