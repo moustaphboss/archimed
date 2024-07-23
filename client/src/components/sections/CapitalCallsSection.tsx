@@ -173,76 +173,97 @@ export default function CapitalCallsSection() {
                 </div>
               ) : (
                 <Accordion>
-                  {investors.map((investor) => (
-                    <Accordion.Panel key={investor.id}>
-                      <Accordion.Title className="font-medium bg-white hover:bg-slate-50 focus:ring-0 focus:font-bold focus:text-violet-700">
-                        {investor.first_name} {investor.last_name}
-                      </Accordion.Title>
-                      <Accordion.Content className="bg-slate-100">
-                        <h4 className="text-md font-bold text-gray-700 mb-4">
-                          Validated Bills
-                        </h4>
+                  {investors.map((investor) => {
+                    const validatedBills = getValidatedBillsForInvestor(
+                      investor.id
+                    );
+                    return (
+                      <Accordion.Panel key={investor.id}>
+                        <Accordion.Title className="font-medium bg-white hover:bg-slate-50 focus:ring-0 focus:font-bold focus:text-violet-700">
+                          {investor.first_name} {investor.last_name}
+                        </Accordion.Title>
+                        <Accordion.Content className="bg-slate-100">
+                          <h4 className="text-md font-bold text-gray-700 mb-4">
+                            Validated Bills
+                          </h4>
 
-                        <Table className="min-w-full divide-y divide-gray-200 mb-2">
-                          <Table.Head>
-                            <Table.HeadCell className="p-4">
-                              <Checkbox
-                                checked={selectAll[investor.id] || false}
-                                onChange={(e) =>
-                                  handleSelectAll(investor.id, e.target.checked)
-                                }
-                                color="indigo"
-                              />
-                            </Table.HeadCell>
-                            <Table.HeadCell className="px-4 py-2">
-                              Bill Code
-                            </Table.HeadCell>
-                            <Table.HeadCell className="px-4 py-2">
-                              Amount
-                            </Table.HeadCell>
-                          </Table.Head>
-                          <Table.Body className="bg-white divide-y divide-gray-200">
-                            {getValidatedBillsForInvestor(investor.id).map(
-                              (bill) => (
-                                <Table.Row
-                                  className="bg-slate-100"
-                                  key={bill.id}
-                                >
-                                  <Table.Cell className="p-4">
+                          {validatedBills.length === 0 ? (
+                            <div className="text-gray-500 text-center py-4">
+                              No validated bills available.
+                            </div>
+                          ) : (
+                            <>
+                              <Table className="min-w-full divide-y divide-gray-200 mb-2">
+                                <Table.Head>
+                                  <Table.HeadCell className="p-4">
                                     <Checkbox
-                                      color="indigo"
-                                      checked={selectedBills[bill.id] || false}
+                                      checked={selectAll[investor.id] || false}
                                       onChange={(e) =>
-                                        handleSelectBill(
-                                          bill.id,
+                                        handleSelectAll(
+                                          investor.id,
                                           e.target.checked
                                         )
                                       }
+                                      color="indigo"
                                     />
-                                  </Table.Cell>
-                                  <Table.Cell className="px-4 py-2">
-                                    {bill.bill_code}
-                                  </Table.Cell>
-                                  <Table.Cell className="px-4 py-2">
-                                    {formatCurrency(bill.amount)}
-                                  </Table.Cell>
-                                </Table.Row>
-                              )
-                            )}
-                          </Table.Body>
-                        </Table>
-                        <div className="flex justify-end">
-                          <button
-                            className="bg-violet-600 text-white rounded-xl p-3 disabled:bg-violet-300 disabled:cursor-not-allowed"
-                            disabled={!isAnyBillSelected}
-                            onClick={() => handleCreateCapitalCall(investor)}
-                          >
-                            Create Capital Call
-                          </button>
-                        </div>
-                      </Accordion.Content>
-                    </Accordion.Panel>
-                  ))}
+                                  </Table.HeadCell>
+                                  <Table.HeadCell className="px-4 py-2">
+                                    Bill Code
+                                  </Table.HeadCell>
+                                  <Table.HeadCell className="px-4 py-2">
+                                    Amount
+                                  </Table.HeadCell>
+                                </Table.Head>
+                                <Table.Body className="bg-white divide-y divide-gray-200">
+                                  {getValidatedBillsForInvestor(
+                                    investor.id
+                                  ).map((bill) => (
+                                    <Table.Row
+                                      className="bg-slate-100"
+                                      key={bill.id}
+                                    >
+                                      <Table.Cell className="p-4">
+                                        <Checkbox
+                                          color="indigo"
+                                          checked={
+                                            selectedBills[bill.id] || false
+                                          }
+                                          onChange={(e) =>
+                                            handleSelectBill(
+                                              bill.id,
+                                              e.target.checked
+                                            )
+                                          }
+                                        />
+                                      </Table.Cell>
+                                      <Table.Cell className="px-4 py-2">
+                                        {bill.bill_code}
+                                      </Table.Cell>
+                                      <Table.Cell className="px-4 py-2">
+                                        {formatCurrency(bill.amount)}
+                                      </Table.Cell>
+                                    </Table.Row>
+                                  ))}
+                                </Table.Body>
+                              </Table>
+
+                              <div className="flex justify-end">
+                                <button
+                                  className="bg-violet-600 text-white rounded-xl p-3 disabled:bg-violet-300 disabled:cursor-not-allowed"
+                                  disabled={!isAnyBillSelected}
+                                  onClick={() =>
+                                    handleCreateCapitalCall(investor)
+                                  }
+                                >
+                                  Create Capital Call
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </Accordion.Content>
+                      </Accordion.Panel>
+                    );
+                  })}
                 </Accordion>
               )}
             </div>
