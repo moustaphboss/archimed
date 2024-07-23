@@ -11,29 +11,47 @@ const CapitalCallBox: React.FC<CapitalCallBoxProps> = ({ capitalCall }) => {
   return (
     <div
       key={capitalCall.id}
-      className="rounded-xl p-4 mb-4 bg-white shadow-sm"
+      className="rounded-xl p-4 mb-4 bg-white shadow-sm text-slate-700"
     >
-      <h4 className="text-lg font-semibold mb-2">
-        {capitalCall.first_name} {capitalCall.last_name}
-      </h4>
       <p>
-        <strong>Company:</strong> {capitalCall.company_name}
+        IBAN: <strong>{IBAN.printFormat(capitalCall.company_iban)}</strong>
       </p>
       <p>
-        <strong>IBAN:</strong> {IBAN.printFormat(capitalCall.company_iban)}
+        Due Date: <strong>{capitalCall.due_date}</strong>
+      </p>
+
+      <hr className="my-2" />
+
+      <p className="text-lg">
+        FROM: <strong>{capitalCall.company_name}</strong>
+      </p>
+
+      <p className="text-lg">
+        TO:{" "}
+        <strong>
+          {capitalCall.first_name} {capitalCall.last_name}
+        </strong>
       </p>
       <p>
-        <strong>Date:</strong> {capitalCall.date}
+        EMAIL: <strong>{capitalCall.email}</strong>
       </p>
+
+      <hr className="my-2" />
+
+      <div className="flex w-full justify-between">
+        <p>
+          <strong>Total Amount:</strong>{" "}
+          {formatCurrency(capitalCall.total_amount)}
+        </p>
+        <p>
+          Date: <strong>{capitalCall.date}</strong>
+        </p>
+      </div>
+
+      <hr className="my-2" />
+
       <p>
-        <strong>Due Date:</strong> {capitalCall.due_date}
-      </p>
-      <p>
-        <strong>Total Amount:</strong>{" "}
-        {formatCurrency(capitalCall.total_amount)}
-      </p>
-      <p>
-        <strong>Status:</strong> {capitalCall.status}
+        Status: <strong>{capitalCall.status}</strong>
       </p>
     </div>
   );
