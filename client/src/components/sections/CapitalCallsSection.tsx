@@ -164,7 +164,7 @@ export default function CapitalCallsSection() {
             company={company}
             onEditClick={() => setOpenModal(true)}
           />
-          <div className="flex space-x-6 mt-6 h-4/5">
+          <div className="flex space-x-6 mt-6">
             <div className="p-4 border border-gray-300 rounded-xl w-full flex-grow">
               <h3 className="text-xl font-medium mb-4">Investors</h3>
               {isLoading ? (
@@ -287,8 +287,16 @@ export default function CapitalCallsSection() {
           </div>
         </>
       ) : (
-        <div className="flex justify-center items-center h-full">
-          <Spinner />
+        <div className="bg-violet-100 rounded-xl p-8 text-center">
+          <h4 className="text-gray-800 text-2xl mb-4 font-medium">
+            Start by adding the Company Data
+          </h4>
+          <button
+            onClick={() => setOpenModal(true)}
+            className="px-8 py-4 text-lg bg-violet-600 text-white rounded-xl"
+          >
+            Add company data
+          </button>
         </div>
       )}
       <ToastContainer />

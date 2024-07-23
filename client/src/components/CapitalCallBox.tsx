@@ -50,9 +50,12 @@ const CapitalCallBox: React.FC<CapitalCallBoxProps> = ({ capitalCall }) => {
 
       <hr className="my-2" />
 
-      <p>
-        Status: <strong>{capitalCall.status}</strong>
-      </p>
+      <div className="flex items-center space-x-4">
+        <p>Status</p>
+        <div className="bg-violet-100 w-fit px-4 py-1 font-medium text-lg text-violet-700 rounded-full">
+          {capitalCall.status}
+        </div>
+      </div>
     </div>
   );
 };
