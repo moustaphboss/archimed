@@ -10,6 +10,14 @@ This project is designed to automate the process of sending capital call invoice
 - **Backend:** Django REST Framework.
 - **Database:** PostgreSQL.
 
+## Data Structure
+
+Here's a UML Class diagram that represents how the different entities of our system interact with each other.
+
+![Project Logo](UML.jpg)
+
+## Screenshots
+
 ## Assumptions
 
 ### Bills Generation
