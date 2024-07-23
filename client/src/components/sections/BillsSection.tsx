@@ -113,8 +113,8 @@ export default function BillsSection() {
               <div className="bg-violet-100 mb-4 p-4 rounded-lg flex space-x-4 justify-center items-center">
                 <i className="fi-rr-info text-violet-600 mt-1 text-2xl"></i>
                 <p className="text-lg font-regular text-violet-700">
-                  The list of bills is dynamically generated. Refresh to see if
-                  there are new bills :)
+                  The list of bills is dynamically generated. Refresh to check
+                  for new bills :)
                 </p>
               </div>
 

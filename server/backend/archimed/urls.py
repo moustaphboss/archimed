@@ -1,6 +1,10 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import InvestorViewSet, GenerateBillsView, BillsListView, ValidateBillView, CompanyViewSet, CapitalCallListCreateView
+
+from .views.bills import BillsListView, GenerateBillsView , ValidateBillView
+from .views.investors import InvestorViewSet
+from .views.company import CompanyViewSet
+from .views.capitalcalls import CapitalCallListCreateView
 
 router = DefaultRouter()
 router.register(r'investors', InvestorViewSet)
