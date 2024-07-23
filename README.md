@@ -20,9 +20,22 @@ Here's a UML Class diagram that represents how the different entities of our sys
 
 ### Investors interface
 
+![Investor](screenshots/inv1.png)
+![Investor](screenshots/inv2.png)
+![Investor](screenshots/inv3.png)
+
 ### Bills Page
 
+![Bills](screenshots/bill1.png)
+![Bills](screenshots/bill2.png)
+![Bills](screenshots/bill3.png)
+![Bills](screenshots/bill4.png)
+
 ### Capital Calls Interface
+
+![Capital Calls](screenshots/cap1.png)
+![Capital Calls](screenshots/cap2.png)
+![Capital Calls](screenshots/cap3.png)
 
 ## Assumptions
 
@@ -94,3 +107,14 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
+
+## Some Valid IBANs for testing purposes
+
+The program will check whether a provided IBAN respects the IBAN ISO norms or not.
+Here are some valid IBANs to be used for testing purposes
+Germany (DE): DE89370400440532013000
+United Kingdom (GB): GB82WEST12345698765432
+France (FR): FR1420041010050500013M02606
+Spain (ES): ES9121000418450200051332
+Italy (IT): IT60X0542811101000000123456
+Netherlands (NL): NL91ABNA0417164300
