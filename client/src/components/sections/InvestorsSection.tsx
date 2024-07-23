@@ -3,7 +3,11 @@ import { Investor } from "../../utils/interfaces";
 import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
 import "../../css/custom-datepicker.css";
-import { addInvestor, fetchInvestors } from "../../api/investors-api";
+import {
+  addInvestor,
+  deleteInvestor,
+  fetchInvestors,
+} from "../../api/investors-api";
 import { toast, ToastContainer } from "react-toastify";
 import { formatCurrency } from "../../utils/utils";
 
@@ -69,6 +73,19 @@ export default function InvestorsSection() {
     }
   };
 
+  const handleDeleteInvestor = async (investorId: number) => {
+    try {
+      await deleteInvestor(investorId);
+      setInvestors((prev) =>
+        prev.filter((investor) => investor.id !== investorId)
+      );
+      toast.success("Investor deleted successfully!");
+    } catch (error) {
+      console.error("Failed to delete investor:", error);
+      toast.error("Failed to delete investor.");
+    }
+  };
+
   useEffect(() => {
     const loadInvestors = async () => {
       try {
@@ -106,6 +123,7 @@ export default function InvestorsSection() {
               <Table.HeadCell>Email</Table.HeadCell>
               <Table.HeadCell>Amount Invested</Table.HeadCell>
               <Table.HeadCell>Investment Date</Table.HeadCell>
+              <Table.HeadCell>Action</Table.HeadCell>
             </Table.Head>
             <Table.Body>
               {investors.map((investor) => (
@@ -118,6 +136,11 @@ export default function InvestorsSection() {
                     {formatCurrency(investor.amount_invested)}
                   </Table.Cell>
                   <Table.Cell>{investor.investment_date}</Table.Cell>
+                  <Table.Cell>
+                    <button onClick={() => handleDeleteInvestor(investor.id)}>
+                      <i className="fi-rr-trash"></i>
+                    </button>
+                  </Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>

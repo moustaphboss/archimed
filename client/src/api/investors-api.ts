@@ -36,3 +36,15 @@ export const addInvestor = async (investor: Investor) => {
     throw error;
   }
 };
+
+export const deleteInvestor = async (id: number) => {
+  try {
+    const response = await fetch(`${API_URL}${id}/`, {
+      method: "DELETE",
+    });
+    if (!response.ok) throw new Error("Network response was not ok");
+  } catch (error) {
+    console.error("Failed to delete investor:", error);
+    throw error;
+  }
+};
