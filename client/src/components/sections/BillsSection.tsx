@@ -118,7 +118,7 @@ export default function BillsSection() {
                 </p>
               </div>
 
-              <Table striped>
+              <Table hoverable>
                 <Table.Head>
                   <Table.HeadCell>Bill Code</Table.HeadCell>
                   <Table.HeadCell>Investor Id</Table.HeadCell>
