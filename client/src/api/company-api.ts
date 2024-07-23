@@ -21,14 +21,16 @@ export const fetchCompanyInfo = async (): Promise<Company | null> => {
 
 export const saveCompanyInfo = async (company: Company): Promise<Company> => {
   try {
-    const response = await fetch(API_URL, {
-      method: "POST",
+    const method = company.id ? "PUT" : "POST";
+    const url = company.id ? `${API_URL}${company.id}/` : API_URL;
+
+    const response = await fetch(url, {
+      method,
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(company),
     });
-    console.log(company);
 
     if (!response.ok) {
       const errorText = await response.text();

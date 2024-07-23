@@ -49,29 +49,38 @@ export default function CapitalCallsSection() {
 
   useEffect(() => {
     const loadInvestors = async () => {
+      setIsLoading(true);
       try {
         const fetchedInvestors = await fetchInvestors();
         setInvestors(fetchedInvestors);
       } catch (error) {
         toast.error("Failed to load investors.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     const loadBills = async () => {
+      setIsLoading(true);
       try {
         const fetchedBills = await fetchBills();
         setBills(fetchedBills);
       } catch (error) {
         toast.error("Failed to load bills.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     const loadCapitalCalls = async () => {
+      setIsLoading(true);
       try {
         const fetchedCapitalCalls = await fetchCapitalCalls();
         setCapitalCalls(fetchedCapitalCalls);
       } catch (error) {
         toast.error("Failed to load capital calls.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -170,7 +179,10 @@ export default function CapitalCallsSection() {
       <h1 className="text-3xl font-medium mb-6">Capital Calls</h1>
       {company ? (
         <>
-          <CompanyInfo company={company} />
+          <CompanyInfo
+            company={company}
+            onEditClick={() => setOpenModal(true)}
+          />
           <div className="flex space-x-6 mt-6 h-4/5">
             <div className="p-4 border border-gray-300 rounded-xl w-full flex-grow">
               <h3 className="text-xl font-medium mb-4">Investors</h3>
@@ -255,7 +267,7 @@ export default function CapitalCallsSection() {
                 </Accordion>
               )}
             </div>
-            <div className="p-4 border border-gray-300 rounded-xl w-full">
+            <div className="p-4  bg-slate-100 rounded-xl w-full">
               <h3 className="text-xl font-medium mb-4">Capital Calls</h3>
               {capitalCalls.length === 0 ? (
                 <div className="text-center text-gray-500">
@@ -265,7 +277,7 @@ export default function CapitalCallsSection() {
                 capitalCalls.map((capitalCall) => (
                   <div
                     key={capitalCall.id}
-                    className="border border-gray-300 rounded-xl p-4 mb-4 bg-white shadow-sm"
+                    className="rounded-xl p-4 mb-4 bg-white shadow-sm"
                   >
                     <h4 className="text-lg font-semibold mb-2">
                       {capitalCall.first_name} {capitalCall.last_name}

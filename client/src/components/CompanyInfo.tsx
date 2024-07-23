@@ -3,11 +3,12 @@ import { Company } from "../utils/interfaces";
 
 interface CompanyInfoProps {
   company: Company;
+  onEditClick: () => void;
 }
 
-const CompanyInfo: React.FC<CompanyInfoProps> = ({ company }) => {
+const CompanyInfo: React.FC<CompanyInfoProps> = ({ company, onEditClick }) => {
   return (
-    <div className="bg-gradient-to-bl from-violet-600 to-violet-800 rounded-2xl p-8 flex">
+    <div className="bg-gradient-to-bl from-violet-600 to-violet-800 rounded-2xl p-8 flex items-center">
       <h4 className="text-white text-xl font-medium w-1/3">
         Company
         <br />
@@ -29,6 +30,14 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({ company }) => {
           <p className="text-white font-medium text-lg">{company.iban}</p>
         </div>
       </div>
+
+      <button
+        onClick={onEditClick}
+        className="border border-violet-300 rounded-full px-6 py-2 text-white flex hover:border-violet-100"
+      >
+        <i className="fi-rr-edit text-lg mr-3 mt-0.5"></i>
+        <span className="font-medium text-lg">Edit</span>
+      </button>
     </div>
   );
 };

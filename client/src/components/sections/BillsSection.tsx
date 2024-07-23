@@ -38,7 +38,7 @@ export default function BillsSection() {
       await generateBills();
       loadBills();
     } catch (error) {
-      toast.error("Failed to generate bills.");
+      console.error("Failed to generate bills.");
     } finally {
       setIsLoading(false);
     }
