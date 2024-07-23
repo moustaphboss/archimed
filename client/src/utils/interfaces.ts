@@ -27,13 +27,26 @@ export interface Company {
   iban: string;
 }
 
+// export interface CapitalCall {
+//   id: number;
+//   investor_id: number;
+//   iban: string;
+//   total_amount: number;
+//   due_date: Date;
+//   status: Status;
+//   bills: Bill[];
+//   date: Date;
+// }
+
 export interface CapitalCall {
-  id: number;
-  investor_id: number;
-  iban: string;
+  id?: number;
+  company_name: string;
+  company_iban: string;
+  date: string;
+  due_date: string;
+  first_name: string;
+  last_name: string;
+  email: string;
   total_amount: number;
-  due_date: Date;
-  status: Status;
-  bills: Bill[];
-  date: Date;
+  status?: string;
 }

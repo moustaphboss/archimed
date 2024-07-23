@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { fetchCompanyInfo } from "../../api/company-api";
 import { fetchInvestors } from "../../api/investors-api";
 import { fetchBills } from "../../api/bills-api";
-import { Company, Investor, Bill } from "../../utils/interfaces";
+import { fetchCapitalCalls } from "../../api/capitalcall-api";
+import { Company, Investor, Bill, CapitalCall } from "../../utils/interfaces";
 import { toast, ToastContainer } from "react-toastify";
 import { Accordion, Checkbox, Spinner, Table } from "flowbite-react";
 import CompanyModal from "../CompanyModal";
@@ -22,6 +23,7 @@ export default function CapitalCallsSection() {
 
   const [investors, setInvestors] = useState<Investor[]>([]);
   const [bills, setBills] = useState<Bill[]>([]);
+  const [capitalCalls, setCapitalCalls] = useState<CapitalCall[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedBills, setSelectedBills] = useState<{
@@ -64,8 +66,18 @@ export default function CapitalCallsSection() {
       }
     };
 
+    const loadCapitalCalls = async () => {
+      try {
+        const fetchedCapitalCalls = await fetchCapitalCalls();
+        setCapitalCalls(fetchedCapitalCalls);
+      } catch (error) {
+        toast.error("Failed to load capital calls.");
+      }
+    };
+
     loadInvestors();
     loadBills();
+    loadCapitalCalls();
   }, []);
 
   const handleCompanyInfoSaved = () => {
@@ -141,6 +153,9 @@ export default function CapitalCallsSection() {
 
       await createCapitalCall(capitalCallData);
       toast.success("Capital call created successfully.");
+
+      const fetchedCapitalCalls = await fetchCapitalCalls();
+      setCapitalCalls(fetchedCapitalCalls);
     } catch (error) {
       toast.error("Failed to create capital call.");
     }
@@ -241,7 +256,42 @@ export default function CapitalCallsSection() {
               )}
             </div>
             <div className="p-4 border border-gray-300 rounded-xl w-full">
-              <h3 className="text-xl font-medium">Capital Calls</h3>
+              <h3 className="text-xl font-medium mb-4">Capital Calls</h3>
+              {capitalCalls.length === 0 ? (
+                <div className="text-center text-gray-500">
+                  No capital calls yet.
+                </div>
+              ) : (
+                capitalCalls.map((capitalCall) => (
+                  <div
+                    key={capitalCall.id}
+                    className="border border-gray-300 rounded-xl p-4 mb-4 bg-white shadow-sm"
+                  >
+                    <h4 className="text-lg font-semibold mb-2">
+                      {capitalCall.first_name} {capitalCall.last_name}
+                    </h4>
+                    <p>
+                      <strong>Company:</strong> {capitalCall.company_name}
+                    </p>
+                    <p>
+                      <strong>IBAN:</strong> {capitalCall.company_iban}
+                    </p>
+                    <p>
+                      <strong>Date:</strong> {capitalCall.date}
+                    </p>
+                    <p>
+                      <strong>Due Date:</strong> {capitalCall.due_date}
+                    </p>
+                    <p>
+                      <strong>Total Amount:</strong>{" "}
+                      {formatCurrency(capitalCall.total_amount)}
+                    </p>
+                    <p>
+                      <strong>Status:</strong> {capitalCall.status}
+                    </p>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </>
