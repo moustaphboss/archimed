@@ -1,10 +1,9 @@
-import React from "react";
 import { SectionKeys } from "../utils/types";
 
 interface NavButtonProps {
   label: string;
   iconClass: string;
-  activeTab: SectionKeys;
+  activeTab: string;
   tabKey: SectionKeys;
   setActiveTab: (tab: SectionKeys) => void;
 }
@@ -17,15 +16,16 @@ const NavButton: React.FC<NavButtonProps> = ({
   setActiveTab,
 }) => {
   return (
-    <button
-      className={`flex items-center w-full mb-4 px-4 py-2 rounded-xl ${
-        activeTab === tabKey ? "bg-violet-600" : "hover:bg-gray-800"
-      }`}
-      onClick={() => setActiveTab(tabKey)}
+    <div
+      className={`flex items-center w-full mb-4 space-x-4 px-4 py-3 rounded-xl ${
+        activeTab === tabKey
+          ? "bg-violet-600"
+          : "bg-transparent hover:bg-neutral-900"
+      } rounded-lg`}
     >
-      <i className={`${iconClass} mt-2 mr-4`}></i>
-      {label}
-    </button>
+      <i className={iconClass}></i>
+      <span>{label}</span>
+    </div>
   );
 };
 
