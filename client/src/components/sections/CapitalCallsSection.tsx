@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { Accordion, Checkbox, Spinner, Table } from "flowbite-react";
 import { fetchCompanyInfo } from "../../api/company-api";
 import { fetchInvestors } from "../../api/investors-api";
 import { fetchBills } from "../../api/bills-api";
-import { fetchCapitalCalls } from "../../api/capitalcall-api";
+import {
+  fetchCapitalCalls,
+  createCapitalCall,
+} from "../../api/capitalcall-api";
 import { Company, Investor, Bill, CapitalCall } from "../../utils/interfaces";
-import { toast, ToastContainer } from "react-toastify";
-import { Accordion, Checkbox, Spinner, Table } from "flowbite-react";
 import CompanyModal from "../CompanyModal";
 import CompanyInfo from "../CompanyInfo";
 import { formatCurrency } from "../../utils/utils";
-import { createCapitalCall } from "../../api/capitalcall-api";
 import CapitalCallBox from "../CapitalCallBox";
 
 export default function CapitalCallsSection() {
@@ -27,70 +29,45 @@ export default function CapitalCallsSection() {
   const [capitalCalls, setCapitalCalls] = useState<CapitalCall[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [selectedBills, setSelectedBills] = useState<{
-    [key: number]: boolean;
-  }>({});
-  const [selectAll, setSelectAll] = useState<{ [key: number]: boolean }>({});
+  const [selectedBills, setSelectedBills] = useState<Record<number, boolean>>(
+    {}
+  );
+  const [selectAll, setSelectAll] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
-    const loadCompanyInfo = async () => {
+    const loadData = async () => {
+      setIsLoading(true);
       try {
-        const fetchedCompany = await fetchCompanyInfo();
+        const [
+          fetchedCompany,
+          fetchedInvestors,
+          fetchedBills,
+          fetchedCapitalCalls,
+        ] = await Promise.all([
+          fetchCompanyInfo(),
+          fetchInvestors(),
+          fetchBills(),
+          fetchCapitalCalls(),
+        ]);
+
         if (fetchedCompany) {
           setCompany(fetchedCompany);
           setCompanyData(fetchedCompany);
         }
-      } catch (error) {
-        toast.error("Failed to load company info.");
-      }
-    };
-
-    loadCompanyInfo();
-  }, []);
-
-  useEffect(() => {
-    const loadInvestors = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedInvestors = await fetchInvestors();
         setInvestors(fetchedInvestors);
-      } catch (error) {
-        toast.error("Failed to load investors.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const loadBills = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedBills = await fetchBills();
         setBills(fetchedBills);
-      } catch (error) {
-        toast.error("Failed to load bills.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const loadCapitalCalls = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedCapitalCalls = await fetchCapitalCalls();
         setCapitalCalls(fetchedCapitalCalls);
       } catch (error) {
-        toast.error("Failed to load capital calls.");
+        toast.error("Failed to load data.");
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadInvestors();
-    loadBills();
-    loadCapitalCalls();
+    loadData();
   }, []);
 
-  const handleCompanyInfoSaved = () => {
+  const handleCompanyInfoSaved = useCallback(() => {
     fetchCompanyInfo()
       .then((fetchedCompany) => {
         if (fetchedCompany) {
@@ -100,34 +77,41 @@ export default function CapitalCallsSection() {
       })
       .catch((error) => {
         console.error("Failed to refresh company info.");
+        toast.error("Failed to refresh company info.");
       });
-  };
+  }, []);
 
-  const getValidatedBillsForInvestor = (investorId: number) => {
-    return bills.filter(
-      (bill) => bill.investor === investorId && bill.validated
-    );
-  };
+  const getValidatedBillsForInvestor = useCallback(
+    (investorId: number) => {
+      return bills.filter(
+        (bill) => bill.investor === investorId && bill.validated
+      );
+    },
+    [bills]
+  );
 
-  const handleSelectAll = (investorId: number, isChecked: boolean) => {
-    const validatedBills = getValidatedBillsForInvestor(investorId);
-    const updatedSelectedBills = { ...selectedBills };
+  const handleSelectAll = useCallback(
+    (investorId: number, isChecked: boolean) => {
+      const validatedBills = getValidatedBillsForInvestor(investorId);
+      const updatedSelectedBills = { ...selectedBills };
 
-    validatedBills.forEach((bill) => {
-      updatedSelectedBills[bill.id] = isChecked;
-    });
+      validatedBills.forEach((bill) => {
+        updatedSelectedBills[bill.id] = isChecked;
+      });
 
-    setSelectedBills(updatedSelectedBills);
-    setSelectAll((prev) => ({ ...prev, [investorId]: isChecked }));
-  };
+      setSelectedBills(updatedSelectedBills);
+      setSelectAll((prev) => ({ ...prev, [investorId]: isChecked }));
+    },
+    [selectedBills, getValidatedBillsForInvestor]
+  );
 
-  const handleSelectBill = (billId: number, isChecked: boolean) => {
+  const handleSelectBill = useCallback((billId: number, isChecked: boolean) => {
     setSelectedBills((prev) => ({ ...prev, [billId]: isChecked }));
-  };
+  }, []);
 
-  const isAnyBillSelected = () => {
+  const isAnyBillSelected = useMemo(() => {
     return Object.values(selectedBills).some((isSelected) => isSelected);
-  };
+  }, [selectedBills]);
 
   const handleCreateCapitalCall = async (investor: Investor) => {
     try {
@@ -169,10 +153,6 @@ export default function CapitalCallsSection() {
     } catch (error) {
       toast.error("Failed to create capital call.");
     }
-  };
-
-  const handleClickCreateCapitalCall = (investor: Investor) => {
-    handleCreateCapitalCall(investor);
   };
 
   return (
@@ -254,10 +234,8 @@ export default function CapitalCallsSection() {
                         <div className="flex justify-end">
                           <button
                             className="bg-violet-600 text-white rounded-xl p-3 disabled:bg-violet-300 disabled:cursor-not-allowed"
-                            disabled={!isAnyBillSelected()}
-                            onClick={() =>
-                              handleClickCreateCapitalCall(investor)
-                            }
+                            disabled={!isAnyBillSelected}
+                            onClick={() => handleCreateCapitalCall(investor)}
                           >
                             Create Capital Call
                           </button>
@@ -268,37 +246,31 @@ export default function CapitalCallsSection() {
                 </Accordion>
               )}
             </div>
-            <div className="p-4  bg-slate-100 rounded-xl w-full">
+            <div className="p-4 bg-slate-100 rounded-xl w-full">
               <h3 className="text-xl font-medium mb-4">Capital Calls</h3>
-              {capitalCalls.length === 0 ? (
-                <div className="text-center text-gray-500">
-                  No capital calls yet.
+              {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <Spinner />
                 </div>
               ) : (
-                capitalCalls.map((capitalCall) => (
-                  <CapitalCallBox
-                    key={capitalCall.id}
-                    capitalCall={capitalCall}
-                  />
-                ))
+                <div className="overflow-y-auto max-h-[600px]">
+                  {capitalCalls.map((capitalCall) => (
+                    <CapitalCallBox
+                      key={capitalCall.id}
+                      capitalCall={capitalCall}
+                    />
+                  ))}
+                </div>
               )}
             </div>
           </div>
         </>
       ) : (
-        <div className="bg-violet-100 rounded-xl p-8 text-center">
-          <h4 className="text-gray-800 text-2xl mb-4 font-medium">
-            Start by adding the Company Data
-          </h4>
-          <button
-            onClick={() => setOpenModal(true)}
-            className="px-8 py-4 text-lg bg-violet-600 text-white rounded-xl"
-          >
-            Add company data
-          </button>
+        <div className="flex justify-center items-center h-full">
+          <Spinner />
         </div>
       )}
-
+      <ToastContainer />
       <CompanyModal
         open={openModal}
         onClose={() => setOpenModal(false)}
@@ -306,7 +278,6 @@ export default function CapitalCallsSection() {
         setCompanyData={setCompanyData}
         onCompanyInfoSaved={handleCompanyInfoSaved}
       />
-      <ToastContainer />
     </>
   );
 }
