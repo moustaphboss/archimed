@@ -1,5 +1,9 @@
 # Archimed Full Stack Developer Case Study
 
+## Demo Video
+https://www.loom.com/share/f63061ff2fac40e696f2007c3c62784f?sid=44fe4ce8-879e-4c71-93c0-28ff96e6105d
+Here's a quick demo video that goes through the main features of the developed platform.
+
 ## Overview
 
 This project is designed to automate the process of sending capital call invoices to investors for ARCHIMED, a healthcare private equity company. The project consists of a React frontend, a Django backend, and a PostgreSQL database. The main features include managing investors, generating bills, and creating capital calls based on specific business rules.
